@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="mobile-nav.js"></script>
+  </head>
+  <body>
+    <%- include("_dashheader.ejs")%>
+    <main>
+      <%- include("_dashnav.ejs")%>
+      <section class="main-content">
+        <% if (locals.successMessage) { %>
+        <div class="success-message">
+          <p><%= locals.successMessage %></p>
+          <button class="close-success">×</button>
+        </div>
+        <% } %>
+
+        <div class="section-header">
+          <h2>⚙️ Settings</h2>
+          <p>Manage your account settings and preferences</p>
+        </div>
+
+        <!-- Settings Sections -->
+        <div class="settings-container">
+          <!-- Account Information -->
+          <div class="settings-section">
+            <div class="settings-header">
+              <h3>👤 Account Information</h3>
+              <p>Your current account details</p>
+            </div>
+            
+            <div class="account-info">
+              <div class="info-card">
+                <div class="info-icon">📧</div>
+                <div class="info-content">
+                  <h4>Email Address</h4>
+                  <p><%= farmer.email %></p>
+                </div>
+              </div>
+              
+              <div class="info-card">
+                <div class="info-icon">👤</div>
+                <div class="info-content">
+                  <h4>Full Name</h4>
+                  <p><%= farmer.fullname %></p>
+                </div>
+              </div>
+              
+              <div class="info-card">
+                <div class="info-icon">📱</div>
+                <div class="info-content">
+                  <h4>Phone Number</h4>
+                  <p><%= farmer.phone || 'Not provided' %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Settings -->
+          <div class="settings-section">
+            <div class="settings-header">
+              <h3>🔒 Security Settings</h3>
+              <p>Manage your password and security preferences</p>
+            </div>
+            
+            <div class="security-form">
+              <form action="/update-password" method="POST" id="passwordForm">
+                <div class="form-group">
+                  <label for="current_password">Current Password *</label>
+                  <input
+                    type="password"
+                    id="current_password"
+                    name="current_password"
+                    required
+                    placeholder="Enter your current password"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="new_password">New Password *</label>
+                  <input
+                    type="password"
+                    id="new_password"
+                    name="new_password"
+                    required
+                    placeholder="Enter your new password"
+                    minlength="6"
+                  />
+                  <small>Password must be at least 6 characters long</small>
+                </div>
+
+                <div class="form-group">
+                  <label for="confirm_password">Confirm New Password *</label>
+                  <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    required
+                    placeholder="Confirm your new password"
+                    minlength="6"
+                  />
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="btn">Update Password</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Application Settings -->
+          <div class="settings-section">
+            <div class="settings-header">
+              <h3>🎛️ Application Settings</h3>
+              <p>Customize your application experience</p>
+            </div>
+            
+            <div class="app-settings">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Email Notifications</h4>
+                  <p>Receive email notifications for important updates</p>
+                </div>
+                <div class="setting-control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked disabled>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Data Export</h4>
+                  <p>Allow data export for backup purposes</p>
+                </div>
+                <div class="setting-control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked disabled>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h4>Analytics</h4>
+                  <p>Help improve the application by sharing usage data</p>
+                </div>
+                <div class="setting-control">
+                  <label class="toggle-switch">
+                    <input type="checkbox" disabled>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- System Information -->
+          <div class="settings-section">
+            <div class="settings-header">
+              <h3>ℹ️ System Information</h3>
+              <p>Application and system details</p>
+            </div>
+            
+            <div class="system-info">
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Application Version:</label>
+                  <span>1.0.0</span>
+                </div>
+                <div class="info-item">
+                  <label>Last Login:</label>
+                  <span>Today</span>
+                </div>
+                <div class="info-item">
+                  <label>Account Status:</label>
+                  <span class="status-active">Active</span>
+                </div>
+                <div class="info-item">
+                  <label>Data Storage:</label>
+                  <span>Local Database</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="settings-section danger-zone">
+            <div class="settings-header">
+              <h3>⚠️ Danger Zone</h3>
+              <p>Irreversible and destructive actions</p>
+            </div>
+            
+            <div class="danger-actions">
+              <div class="danger-item">
+                <div class="danger-info">
+                  <h4>Export All Data</h4>
+                  <p>Download a complete backup of your farm data</p>
+                </div>
+                <button class="btn btn-outline" disabled>Export Data</button>
+              </div>
+              
+              <div class="danger-item">
+                <div class="danger-info">
+                  <h4>Delete Account</h4>
+                  <p>Permanently delete your account and all associated data</p>
+                </div>
+                <button class="btn btn-danger" disabled>Delete Account</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Close success message
+      const closeSuccessBtn = document.querySelector(".close-success");
+      if (closeSuccessBtn) {
+        closeSuccessBtn.addEventListener("click", function () {
+          this.parentElement.style.display = "none";
+        });
+      }
+
+      // Password form validation
+      const passwordForm = document.getElementById("passwordForm");
+      if (passwordForm) {
+        passwordForm.addEventListener("submit", function (e) {
+          const currentPassword = document.getElementById("current_password").value;
+          const newPassword = document.getElementById("new_password").value;
+          const confirmPassword = document.getElementById("confirm_password").value;
+          
+          if (!currentPassword) {
+            e.preventDefault();
+            alert("Current password is required");
+            return false;
+          }
+          
+          if (!newPassword) {
+            e.preventDefault();
+            alert("New password is required");
+            return false;
+          }
+          
+          if (newPassword.length < 6) {
+            e.preventDefault();
+            alert("New password must be at least 6 characters long");
+            return false;
+          }
+          
+          if (newPassword !== confirmPassword) {
+            e.preventDefault();
+            alert("New passwords do not match");
+            return false;
+          }
+          
+          if (currentPassword === newPassword) {
+            e.preventDefault();
+            alert("New password must be different from current password");
+            return false;
+          }
+        });
+      }
+
+      // Real-time password confirmation validation
+      const newPasswordInput = document.getElementById("new_password");
+      const confirmPasswordInput = document.getElementById("confirm_password");
+      
+      function validatePasswordMatch() {
+        if (confirmPasswordInput.value && newPasswordInput.value !== confirmPasswordInput.value) {
+          confirmPasswordInput.setCustomValidity("Passwords do not match");
+        } else {
+          confirmPasswordInput.setCustomValidity("");
+        }
+      }
+      
+      if (newPasswordInput && confirmPasswordInput) {
+        newPasswordInput.addEventListener("input", validatePasswordMatch);
+        confirmPasswordInput.addEventListener("input", validatePasswordMatch);
+      }
+    </script>
+  </body>
+</html>

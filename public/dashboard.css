@@ -1517,3 +1517,648 @@ textarea:focus {
     padding: 20px;
   }
 }
+
+/* Vaccination and Medication Specific Styles */
+.animal-badge {
+  background: #e8f5e8;
+  color: #2c6e49;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vaccine-badge {
+  background: #fff3cd;
+  color: #856404;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.medication-badge {
+  background: #d1ecf1;
+  color: #0c5460;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.due-date {
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.due-date.due-soon {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.due-date.overdue {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.due-date.due-later {
+  background: #d4edda;
+  color: #155724;
+}
+
+.no-due-date {
+  color: #6c757d;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.ongoing-treatment {
+  background: #d1ecf1;
+  color: #0c5460;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-active {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+/* Enhanced form styles for vaccination and medication */
+.form-group small {
+  display: block;
+  margin-top: 4px;
+  color: #6c757d;
+  font-size: 0.8rem;
+}
+
+/* Responsive adjustments for new elements */
+@media (max-width: 768px) {
+  .animal-badge,
+  .vaccine-badge,
+  .medication-badge {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+  }
+
+  .due-date,
+  .ongoing-treatment {
+    font-size: 0.8rem;
+    padding: 2px 4px;
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+  }
+}
+
+/* Feed Consumption Specific Styles */
+.feed-type-badge {
+  background: #e8f4fd;
+  color: #0c5460;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.quantity {
+  font-weight: 600;
+  color: #2c6e49;
+}
+
+/* Farmer Profile Specific Styles */
+.profile-info {
+  display: grid;
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #2c6e49;
+  min-width: 120px;
+}
+
+.info-item span {
+  color: #666;
+  text-align: right;
+}
+
+.profile-form {
+  margin-top: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Settings Specific Styles */
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.settings-section {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+}
+
+.settings-header {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f8f9fa;
+}
+
+.settings-header h3 {
+  margin: 0 0 8px 0;
+  color: #2c6e49;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.settings-header p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* Account Information */
+.account-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.info-icon {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8f5e8;
+  border-radius: 50%;
+}
+
+.info-content h4 {
+  margin: 0 0 5px 0;
+  color: #2c6e49;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.info-content p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Security Form */
+.security-form {
+  max-width: 500px;
+}
+
+/* Application Settings */
+.app-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.setting-info h4 {
+  margin: 0 0 5px 0;
+  color: #2c6e49;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.setting-info p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: #2c6e49;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+input:disabled + .toggle-slider {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* System Information */
+.system-info {
+  margin-top: 20px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.info-grid .info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.info-grid .info-item label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 5px;
+  min-width: auto;
+}
+
+.info-grid .info-item span {
+  font-weight: 600;
+  color: #2c6e49;
+  text-align: left;
+}
+
+.status-active {
+  background: #d4edda;
+  color: #155724;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Danger Zone */
+.danger-zone {
+  border: 2px solid #f8d7da;
+  background: #fdf2f2;
+}
+
+.danger-zone .settings-header h3 {
+  color: #721c24;
+}
+
+.danger-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.danger-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #f5c6cb;
+}
+
+.danger-info h4 {
+  margin: 0 0 5px 0;
+  color: #721c24;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.danger-info p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.btn-danger:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+/* Responsive Design for New Pages */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .account-info {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .setting-item,
+  .danger-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .setting-control,
+  .danger-item button {
+    align-self: stretch;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .info-item label {
+    min-width: auto;
+  }
+
+  .info-item span {
+    text-align: left;
+  }
+}
+
+/* Milk Production Specific Styles */
+.quality-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.quality-high {
+  background: #d4edda;
+  color: #155724;
+}
+
+.quality-medium {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.quality-low {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.quality-unknown {
+  background: #e2e3e5;
+  color: #6c757d;
+}
+
+.session-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.session-morning {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.session-afternoon {
+  background: #fff8e1;
+  color: #f57c00;
+}
+
+.session-evening {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+/* Enhanced form styles for milk production */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Production chart enhancements */
+.production-chart {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+  margin-bottom: 20px;
+}
+
+.chart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.chart-summary h4 {
+  margin: 0;
+  color: #2c6e49;
+  font-size: 1.1rem;
+}
+
+.chart-metrics {
+  display: flex;
+  gap: 20px;
+}
+
+.metric-item {
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c6e49;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Production insights */
+.production-insights {
+  background: #e8f5e8;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  border-left: 4px solid #2c6e49;
+}
+
+.insights-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.insights-header h4 {
+  margin: 0;
+  color: #2c6e49;
+  font-size: 1.1rem;
+}
+
+.insights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.insights-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #d4edda;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.insights-list li:last-child {
+  border-bottom: none;
+}
+
+.insight-icon {
+  font-size: 1.2rem;
+}
+
+/* Responsive adjustments for milk production */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .chart-metrics {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .quality-badge,
+  .session-badge {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+  }
+}

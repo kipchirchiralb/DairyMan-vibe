@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medication Management</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="mobile-nav.js"></script>
+  </head>
+  <body>
+    <%- include("_dashheader.ejs")%>
+    <main>
+      <%- include("_dashnav.ejs")%>
+      <section class="main-content">
+        <% if (locals.successMessage) { %>
+        <div class="success-message">
+          <p><%= locals.successMessage %></p>
+          <button class="close-success">×</button>
+        </div>
+        <% } %>
+
+        <div class="section-header">
+          <h2>💊 Medication Management</h2>
+          <button class="btn" id="addMedicationBtn">
+            Record New Medication
+          </button>
+        </div>
+
+        <!-- Medication Summary Cards -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div class="stat-icon">💊</div>
+            <div class="stat-content">
+              <h3><%= totalMedications %></h3>
+              <p>Total Medications</p>
+              <span class="stat-trend">All time</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-info">
+            <div class="stat-icon">🔄</div>
+            <div class="stat-content">
+              <h3><%= activeMedications %></h3>
+              <p>Active Treatments</p>
+              <span class="stat-trend">Ongoing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Medications Table -->
+        <div class="table-section">
+          <h3>Recent Medications</h3>
+          <div class="table-container">
+            <% if (recentMedications.length > 0) { %>
+            <table class="expenses-table">
+              <thead>
+                <tr>
+                  <th>Start Date</th>
+                  <th>Animal</th>
+                  <th>Medication</th>
+                  <th>Dose</th>
+                  <th>End Date</th>
+                  <th>Veterinarian</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentMedications.forEach(medication => { %>
+                <tr>
+                  <td>
+                    <%= new Date(medication.start_date).toLocaleDateString() %>
+                  </td>
+                  <td>
+                    <span class="animal-badge">
+                      🐄 <%= medication.animal_name %> (<%=
+                      medication.animal_tag %>)
+                    </span>
+                  </td>
+                  <td>
+                    <span class="medication-badge">
+                      <%= medication.medication_name %>
+                    </span>
+                  </td>
+                  <td><%= medication.dose || 'N/A' %></td>
+                  <td>
+                    <% if (medication.end_date) { %> <%= new
+                    Date(medication.end_date).toLocaleDateString() %> <% } else
+                    { %>
+                    <span class="ongoing-treatment">Ongoing</span>
+                    <% } %>
+                  </td>
+                  <td><%= medication.veterinary_name || 'N/A' %></td>
+                  <td>
+                    <% if (medication.end_date) { %> <% const endDate = new
+                    Date(medication.end_date); %> <% const today = new Date();
+                    %> <% if (endDate < today) { %>
+                    <span class="status-badge status-completed">Completed</span>
+                    <% } else { %>
+                    <span class="status-badge status-active">Active</span>
+                    <% } %> <% } else { %>
+                    <span class="status-badge status-active">Active</span>
+                    <% } %>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <div class="table-footer">
+              <a href="#" class="btn btn-secondary">View All Medications</a>
+            </div>
+            <% } else { %>
+            <div class="empty-state">
+              <div class="empty-icon">💊</div>
+              <h3>No Medication Records</h3>
+              <p>
+                Start recording medications to track your animals' treatments
+              </p>
+              <button class="btn" id="addFirstMedicationBtn">
+                Record First Medication
+              </button>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Add Medication Modal -->
+    <div class="modal-overlay" id="medicationModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Record New Medication</h3>
+          <button class="modal-close" id="closeMedicationModal">×</button>
+        </div>
+        <form id="medicationForm" action="/add-medication" method="POST">
+          <div class="form-group">
+            <label for="animal_id">Animal *</label>
+            <select id="animal_id" name="animal_id" required>
+              <option value="">Select animal</option>
+              <% animals.forEach(animal => { %>
+              <option value="<%= animal.animal_tag %>">
+                <%= animal.name %> (<%= animal.animal_tag %>)
+              </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="medication_name">Medication Name *</label>
+            <select id="medication_name" name="medication_name" required>
+              <option value="">Select medication</option>
+              <option value="Antibiotics">Antibiotics</option>
+              <option value="Dewormer">Dewormer</option>
+              <option value="Painkiller">Painkiller</option>
+              <option value="Vitamin Supplement">Vitamin Supplement</option>
+              <option value="Calcium Boost">Calcium Boost</option>
+              <option value="Anti-inflammatory">Anti-inflammatory</option>
+              <option value="Probiotics">Probiotics</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="dose">Dose</label>
+            <input
+              type="text"
+              id="dose"
+              name="dose"
+              placeholder="e.g., 10ml, 2 tablets"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="start_date">Start Date *</label>
+            <input type="date" id="start_date" name="start_date" required />
+          </div>
+
+          <div class="form-group">
+            <label for="end_date">End Date</label>
+            <input type="date" id="end_date" name="end_date" />
+            <small>Leave empty for ongoing treatment</small>
+          </div>
+
+          <div class="form-group">
+            <label for="veterinary_name">Veterinarian Name</label>
+            <input
+              type="text"
+              id="veterinary_name"
+              name="veterinary_name"
+              placeholder="Dr. Name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="veterinary_remarks">Veterinary Remarks</label>
+            <textarea
+              id="veterinary_remarks"
+              name="veterinary_remarks"
+              rows="2"
+              placeholder="Veterinarian's observations and recommendations"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Additional Notes</label>
+            <textarea
+              id="notes"
+              name="notes"
+              rows="3"
+              placeholder="Additional notes about the medication"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancelMedication"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn">Record Medication</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Modal functionality
+      const addMedicationBtn = document.getElementById("addMedicationBtn");
+      const addFirstMedicationBtn = document.getElementById(
+        "addFirstMedicationBtn"
+      );
+      const medicationModal = document.getElementById("medicationModal");
+      const closeMedicationModal = document.getElementById(
+        "closeMedicationModal"
+      );
+      const cancelMedication = document.getElementById("cancelMedication");
+      const medicationForm = document.getElementById("medicationForm");
+
+      // Open modal functions
+      function openMedicationModal() {
+        medicationModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        // Set today's date as default
+        document.getElementById("start_date").value = new Date()
+          .toISOString()
+          .split("T")[0];
+      }
+
+      if (addMedicationBtn) {
+        addMedicationBtn.addEventListener("click", openMedicationModal);
+      }
+
+      if (addFirstMedicationBtn) {
+        addFirstMedicationBtn.addEventListener("click", openMedicationModal);
+      }
+
+      // Close modal functions
+      function closeMedicationModalFunc() {
+        medicationModal.style.display = "none";
+        document.body.style.overflow = "";
+        medicationForm.reset();
+      }
+
+      if (closeMedicationModal) {
+        closeMedicationModal.addEventListener(
+          "click",
+          closeMedicationModalFunc
+        );
+      }
+
+      if (cancelMedication) {
+        cancelMedication.addEventListener("click", closeMedicationModalFunc);
+      }
+
+      // Close modal when clicking overlay
+      if (medicationModal) {
+        medicationModal.addEventListener("click", function (e) {
+          if (e.target === medicationModal) {
+            closeMedicationModalFunc();
+          }
+        });
+      }
+
+      // Close modal on escape key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && medicationModal.style.display === "flex") {
+          closeMedicationModalFunc();
+        }
+      });
+
+      // Auto-suggest end date based on medication type
+      const medicationSelect = document.getElementById("medication_name");
+      const startDateInput = document.getElementById("start_date");
+      const endDateInput = document.getElementById("end_date");
+
+      function calculateEndDate() {
+        if (!medicationSelect.value || !startDateInput.value) return;
+
+        const medication = medicationSelect.value;
+        const startDate = new Date(startDateInput.value);
+        let endDate = new Date(startDate);
+
+        // Set default treatment durations based on medication type
+        switch (medication) {
+          case "Antibiotics":
+            endDate.setDate(startDate.getDate() + 7); // 7 days
+            break;
+          case "Dewormer":
+            endDate.setDate(startDate.getDate() + 1); // Single dose
+            break;
+          case "Painkiller":
+            endDate.setDate(startDate.getDate() + 3); // 3 days
+            break;
+          case "Vitamin Supplement":
+            endDate.setDate(startDate.getDate() + 14); // 2 weeks
+            break;
+          case "Calcium Boost":
+            endDate.setDate(startDate.getDate() + 3); // 3 days
+            break;
+          case "Anti-inflammatory":
+            endDate.setDate(startDate.getDate() + 5); // 5 days
+            break;
+          case "Probiotics":
+            endDate.setDate(startDate.getDate() + 10); // 10 days
+            break;
+          default:
+            return; // Don't auto-set for "Other"
+        }
+
+        endDateInput.value = endDate.toISOString().split("T")[0];
+      }
+
+      if (medicationSelect) {
+        medicationSelect.addEventListener("change", calculateEndDate);
+      }
+
+      if (startDateInput) {
+        startDateInput.addEventListener("change", calculateEndDate);
+      }
+
+      // Close success message
+      const closeSuccessBtn = document.querySelector(".close-success");
+      if (closeSuccessBtn) {
+        closeSuccessBtn.addEventListener("click", function () {
+          this.parentElement.style.display = "none";
+        });
+      }
+    </script>
+  </body>
+</html>

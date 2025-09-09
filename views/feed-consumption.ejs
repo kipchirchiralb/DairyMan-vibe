@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feed Consumption Management</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="mobile-nav.js"></script>
+  </head>
+  <body>
+    <%- include("_dashheader.ejs")%>
+    <main>
+      <%- include("_dashnav.ejs")%>
+      <section class="main-content">
+        <% if (locals.successMessage) { %>
+        <div class="success-message">
+          <p><%= locals.successMessage %></p>
+          <button class="close-success">×</button>
+        </div>
+        <% } %>
+
+        <div class="section-header">
+          <h2>🌾 Feed Consumption Management</h2>
+          <button class="btn" id="addFeedBtn">Record Feed Consumption</button>
+        </div>
+
+        <!-- Feed Consumption Summary Cards -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+              <h3><%= totalFeedRecords %></h3>
+              <p>Total Feed Records</p>
+              <span class="stat-trend">All time</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-warning">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+              <h3>KSh <%= totalFeedCost.toLocaleString() %></h3>
+              <p>30-Day Feed Cost</p>
+              <span class="stat-trend">Last 30 days</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-info">
+            <div class="stat-icon">📈</div>
+            <div class="stat-content">
+              <h3>KSh <%= avgDailyCost.toFixed(0) %></h3>
+              <p>Daily Average Cost</p>
+              <span class="stat-trend">Per day</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Feed Consumption Table -->
+        <div class="table-section">
+          <h3>Recent Feed Consumption</h3>
+          <div class="table-container">
+            <% if (recentFeedConsumption.length > 0) { %>
+            <table class="expenses-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Animal</th>
+                  <th>Feed Type</th>
+                  <th>Quantity</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentFeedConsumption.forEach(feed => { %>
+                <tr>
+                  <td>
+                    <%= new Date(feed.date).toLocaleDateString() %> 
+                    <small><%= new Date(feed.date).toLocaleTimeString() %></small>
+                  </td>
+                  <td>
+                    <span class="animal-badge">
+                      🐄 <%= feed.animal_name %> (<%= feed.animal_tag %>)
+                    </span>
+                  </td>
+                  <td>
+                    <span class="feed-type-badge">
+                      <%= feed.type %>
+                    </span>
+                  </td>
+                  <td class="quantity">
+                    <%= feed.quantity %> kg
+                  </td>
+                  <td class="amount">
+                    KSh <%= parseFloat(feed.cost).toLocaleString() %>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <div class="table-footer">
+              <a href="#" class="btn btn-secondary">View All Feed Records</a>
+            </div>
+            <% } else { %>
+            <div class="empty-state">
+              <div class="empty-icon">🌾</div>
+              <h3>No Feed Consumption Records</h3>
+              <p>Start recording feed consumption to track your animals' nutrition</p>
+              <button class="btn" id="addFirstFeedBtn">Record First Feed</button>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Add Feed Consumption Modal -->
+    <div class="modal-overlay" id="feedModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Record Feed Consumption</h3>
+          <button class="modal-close" id="closeFeedModal">×</button>
+        </div>
+        <form id="feedForm" action="/add-feed-consumption" method="POST">
+          <div class="form-group">
+            <label for="animalfed">Animal *</label>
+            <select id="animalfed" name="animalfed" required>
+              <option value="">Select animal</option>
+              <% animals.forEach(animal => { %>
+                <option value="<%= animal.animal_tag %>">
+                  <%= animal.name %> (<%= animal.animal_tag %>)
+                </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="type">Feed Type *</label>
+            <select id="type" name="type" required>
+              <option value="">Select feed type</option>
+              <option value="Napier Grass">Napier Grass</option>
+              <option value="Dairy Meal">Dairy Meal</option>
+              <option value="Hay">Hay</option>
+              <option value="Silage">Silage</option>
+              <option value="Molasses">Molasses</option>
+              <option value="Concentrate">Concentrate</option>
+              <option value="Mineral Supplement">Mineral Supplement</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">Quantity (kg) *</label>
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              step="0.1"
+              min="0.1"
+              required
+              placeholder="0.0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="cost">Cost (KSh) *</label>
+            <input
+              type="number"
+              id="cost"
+              name="cost"
+              step="0.01"
+              min="0.01"
+              required
+              placeholder="0.00"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="cancelFeed">
+              Cancel
+            </button>
+            <button type="submit" class="btn">Record Feed Consumption</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Modal functionality
+      const addFeedBtn = document.getElementById("addFeedBtn");
+      const addFirstFeedBtn = document.getElementById("addFirstFeedBtn");
+      const feedModal = document.getElementById("feedModal");
+      const closeFeedModal = document.getElementById("closeFeedModal");
+      const cancelFeed = document.getElementById("cancelFeed");
+      const feedForm = document.getElementById("feedForm");
+
+      // Open modal functions
+      function openFeedModal() {
+        feedModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      }
+
+      if (addFeedBtn) {
+        addFeedBtn.addEventListener("click", openFeedModal);
+      }
+      
+      if (addFirstFeedBtn) {
+        addFirstFeedBtn.addEventListener("click", openFeedModal);
+      }
+
+      // Close modal functions
+      function closeFeedModalFunc() {
+        feedModal.style.display = "none";
+        document.body.style.overflow = "";
+        feedForm.reset();
+      }
+
+      if (closeFeedModal) {
+        closeFeedModal.addEventListener("click", closeFeedModalFunc);
+      }
+      
+      if (cancelFeed) {
+        cancelFeed.addEventListener("click", closeFeedModalFunc);
+      }
+
+      // Close modal when clicking overlay
+      if (feedModal) {
+        feedModal.addEventListener("click", function (e) {
+          if (e.target === feedModal) {
+            closeFeedModalFunc();
+          }
+        });
+      }
+
+      // Close modal on escape key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && feedModal.style.display === "flex") {
+          closeFeedModalFunc();
+        }
+      });
+
+      // Form validation
+      if (feedForm) {
+        feedForm.addEventListener("submit", function (e) {
+          const quantity = parseFloat(document.getElementById("quantity").value);
+          const cost = parseFloat(document.getElementById("cost").value);
+          
+          if (quantity <= 0) {
+            e.preventDefault();
+            alert("Quantity must be greater than 0");
+            return false;
+          }
+          
+          if (cost <= 0) {
+            e.preventDefault();
+            alert("Cost must be greater than 0");
+            return false;
+          }
+        });
+      }
+
+      // Close success message
+      const closeSuccessBtn = document.querySelector(".close-success");
+      if (closeSuccessBtn) {
+        closeSuccessBtn.addEventListener("click", function () {
+          this.parentElement.style.display = "none";
+        });
+      }
+    </script>
+  </body>
+</html>

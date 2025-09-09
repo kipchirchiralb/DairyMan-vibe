@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer Profile</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="mobile-nav.js"></script>
+  </head>
+  <body>
+    <%- include("_dashheader.ejs")%>
+    <main>
+      <%- include("_dashnav.ejs")%>
+      <section class="main-content">
+        <% if (locals.successMessage) { %>
+        <div class="success-message">
+          <p><%= locals.successMessage %></p>
+          <button class="close-success">×</button>
+        </div>
+        <% } %>
+
+        <div class="section-header">
+          <h2>👤 Farmer Profile</h2>
+          <p>Manage your personal and farm information</p>
+        </div>
+
+        <!-- Profile Statistics -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div class="stat-icon">🐄</div>
+            <div class="stat-content">
+              <h3><%= stats.totalAnimals %></h3>
+              <p>Total Animals</p>
+              <span class="stat-trend">Active animals</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-success">
+            <div class="stat-icon">🥛</div>
+            <div class="stat-content">
+              <h3><%= stats.totalProduction.toFixed(1) %>L</h3>
+              <p>30-Day Production</p>
+              <span class="stat-trend">Last 30 days</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-warning">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+              <h3>KSh <%= stats.totalExpenses.toLocaleString() %></h3>
+              <p>Monthly Expenses</p>
+              <span class="stat-trend">Last 30 days</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-info">
+            <div class="stat-icon">📅</div>
+            <div class="stat-content">
+              <h3><%= new Date(stats.registrationDate).toLocaleDateString() %></h3>
+              <p>Member Since</p>
+              <span class="stat-trend">Registration date</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Information -->
+        <div class="dashboard-grid">
+          <!-- Personal Information -->
+          <div class="dashboard-section">
+            <div class="section-header">
+              <h3>📋 Personal Information</h3>
+              <p>Your personal details and contact information</p>
+            </div>
+            
+            <div class="profile-info">
+              <div class="info-item">
+                <label>Full Name:</label>
+                <span><%= farmer.fullname %></span>
+              </div>
+              <div class="info-item">
+                <label>Email:</label>
+                <span><%= farmer.email %></span>
+              </div>
+              <div class="info-item">
+                <label>Phone:</label>
+                <span><%= farmer.phone || 'Not provided' %></span>
+              </div>
+              <div class="info-item">
+                <label>County:</label>
+                <span><%= farmer.county || 'Not provided' %></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Farm Information -->
+          <div class="dashboard-section">
+            <div class="section-header">
+              <h3>🚜 Farm Information</h3>
+              <p>Details about your farm and operations</p>
+            </div>
+            
+            <div class="profile-info">
+              <div class="info-item">
+                <label>Farm Name:</label>
+                <span><%= farmer.farm_name || 'Not provided' %></span>
+              </div>
+              <div class="info-item">
+                <label>Farm Location:</label>
+                <span><%= farmer.farm_location || 'Not provided' %></span>
+              </div>
+              <div class="info-item">
+                <label>Registration Date:</label>
+                <span><%= new Date(farmer.registration_date).toLocaleDateString() %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Profile Section -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h3>✏️ Edit Profile</h3>
+            <p>Update your personal and farm information</p>
+          </div>
+          
+          <form action="/update-farmer-profile" method="POST" class="profile-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullname">Full Name *</label>
+                <input
+                  type="text"
+                  id="fullname"
+                  name="fullname"
+                  value="<%= farmer.fullname %>"
+                  required
+                />
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value="<%= farmer.email %>"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value="<%= farmer.phone || '' %>"
+                  placeholder="e.g., 0712345678"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label for="county">County</label>
+                <input
+                  type="text"
+                  id="county"
+                  name="county"
+                  value="<%= farmer.county || '' %>"
+                  placeholder="e.g., Nairobi"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="farm_name">Farm Name</label>
+                <input
+                  type="text"
+                  id="farm_name"
+                  name="farm_name"
+                  value="<%= farmer.farm_name || '' %>"
+                  placeholder="e.g., Green Pastures Farm"
+                />
+              </div>
+              
+              <div class="form-group">
+                <label for="farm_location">Farm Location</label>
+                <input
+                  type="text"
+                  id="farm_location"
+                  name="farm_location"
+                  value="<%= farmer.farm_location || '' %>"
+                  placeholder="e.g., Kiambu Road, Nairobi"
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn">Update Profile</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Close success message
+      const closeSuccessBtn = document.querySelector(".close-success");
+      if (closeSuccessBtn) {
+        closeSuccessBtn.addEventListener("click", function () {
+          this.parentElement.style.display = "none";
+        });
+      }
+
+      // Form validation
+      const profileForm = document.querySelector(".profile-form");
+      if (profileForm) {
+        profileForm.addEventListener("submit", function (e) {
+          const fullname = document.getElementById("fullname").value.trim();
+          const email = document.getElementById("email").value.trim();
+          
+          if (!fullname) {
+            e.preventDefault();
+            alert("Full name is required");
+            return false;
+          }
+          
+          if (!email) {
+            e.preventDefault();
+            alert("Email is required");
+            return false;
+          }
+          
+          // Basic email validation
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            e.preventDefault();
+            alert("Please enter a valid email address");
+            return false;
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

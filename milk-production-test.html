@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milk Production Management Test - Dairyman</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+      }
+      .test-section h3 {
+        color: #2c6e49;
+        margin-top: 0;
+      }
+      .feature-demo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .demo-card {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .demo-card h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .feature-list {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .feature-list h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .feature-list ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .feature-list li {
+        margin-bottom: 8px;
+      }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 10px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        overflow-x: auto;
+      }
+      .testing-steps {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .testing-steps h4 {
+        margin-top: 0;
+        color: #856404;
+      }
+      .testing-steps ol {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .testing-steps li {
+        margin-bottom: 8px;
+      }
+      .milk-features {
+        background: #d1ecf1;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .milk-features h4 {
+        color: #0c5460;
+        margin-top: 0;
+      }
+      .analytics-features {
+        background: #d4edda;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .analytics-features h4 {
+        color: #155724;
+        margin-top: 0;
+      }
+      .chart-features {
+        background: #f8d7da;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .chart-features h4 {
+        color: #721c24;
+        margin-top: 0;
+      }
+      @media (max-width: 768px) {
+        .feature-demo {
+          grid-template-columns: 1fr;
+        }
+        .test-container {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🥛 Milk Production Management - Dairyman</h1>
+      <p>
+        This page demonstrates the comprehensive milk production management
+        system implemented for the Dairyman application, providing farmers with
+        complete milk production tracking, analytics, and performance insights.
+      </p>
+
+      <div class="test-section">
+        <h3>🎯 Feature Overview</h3>
+        <div class="feature-demo">
+          <div class="demo-card">
+            <h4>📊 Production Tracking</h4>
+            <p>Complete milk production monitoring:</p>
+            <ul>
+              <li>Daily production records</li>
+              <li>Animal-specific tracking</li>
+              <li>Quality assessment</li>
+              <li>Session-based recording</li>
+            </ul>
+          </div>
+          <div class="demo-card">
+            <h4>📈 Analytics & Insights</h4>
+            <p>Advanced production analytics:</p>
+            <ul>
+              <li>Individual animal charts</li>
+              <li>Performance trends</li>
+              <li>Best performer identification</li>
+              <li>Daily averages</li>
+            </ul>
+          </div>
+          <div class="demo-card">
+            <h4>🏆 Performance Management</h4>
+            <p>Comprehensive performance tracking:</p>
+            <ul>
+              <li>Top performer recognition</li>
+              <li>Production statistics</li>
+              <li>Quality monitoring</li>
+              <li>Historical data analysis</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🥛 Milk Production Dashboard Features</h3>
+        <div class="milk-features">
+          <h4>Key Production Features</h4>
+          <ul>
+            <li>
+              <strong>Statistics Cards:</strong> Total records, 30-day
+              production, daily average, and top performer
+            </li>
+            <li>
+              <strong>Production Records Table:</strong> Recent production with
+              animal details, timestamps, and quality
+            </li>
+            <li>
+              <strong>Add Production Modal:</strong> Comprehensive form for
+              recording new milk production
+            </li>
+            <li>
+              <strong>Animal Selection:</strong> Dropdown with all active
+              animals
+            </li>
+            <li>
+              <strong>Quality Tracking:</strong> High, Medium, Low quality
+              assessment
+            </li>
+            <li>
+              <strong>Session Identification:</strong> Morning, Afternoon,
+              Evening session badges
+            </li>
+            <li>
+              <strong>Quantity Management:</strong> Precise quantity tracking in
+              liters
+            </li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>Production Form Fields</h4>
+          <ul>
+            <li>
+              <strong>Animal Selection:</strong> Choose from active animals
+            </li>
+            <li>
+              <strong>Production Date:</strong> Date picker for production date
+            </li>
+            <li>
+              <strong>Production Time:</strong> Time picker for milking time
+            </li>
+            <li>
+              <strong>Quantity:</strong> Amount in liters (decimal support)
+            </li>
+            <li>
+              <strong>Quality:</strong> High, Medium, Low quality assessment
+            </li>
+            <li>
+              <strong>Auto-session Detection:</strong> Automatic session
+              classification
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📈 Analytics & Chart Features</h3>
+        <div class="analytics-features">
+          <h4>Key Analytics Features</h4>
+          <ul>
+            <li>
+              <strong>Individual Animal Charts:</strong> Line charts for each
+              animal's production trends
+            </li>
+            <li>
+              <strong>15-Day Trend Analysis:</strong> Recent production patterns
+              for each animal
+            </li>
+            <li>
+              <strong>Performance Comparison:</strong> Visual comparison of
+              animal performance
+            </li>
+            <li>
+              <strong>Production Insights:</strong> Automated insights and
+              recommendations
+            </li>
+            <li>
+              <strong>Best Performer Recognition:</strong> Top performing animal
+              identification
+            </li>
+            <li>
+              <strong>Daily Averages:</strong> Calculated daily production
+              averages
+            </li>
+          </ul>
+        </div>
+
+        <div class="chart-features">
+          <h4>Chart.js Integration</h4>
+          <ul>
+            <li>
+              <strong>Responsive Charts:</strong> Charts adapt to screen size
+            </li>
+            <li>
+              <strong>Color-coded Animals:</strong> Unique colors for each
+              animal
+            </li>
+            <li>
+              <strong>Interactive Tooltips:</strong> Hover for detailed
+              information
+            </li>
+            <li>
+              <strong>Smooth Animations:</strong> Professional chart animations
+            </li>
+            <li>
+              <strong>Fill Areas:</strong> Filled areas under production lines
+            </li>
+            <li><strong>Point Markers:</strong> Clear data point indicators</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔧 Technical Implementation</h3>
+        <h4>Backend Routes</h4>
+        <div class="code-block">
+          // Milk Production Routes app.get("/milk-production", (req, res) => {
+          // Get milk production statistics and records const queries = [ //
+          Total production count `SELECT COUNT(*) as total_production_records
+          FROM MilkProduction mp JOIN Animal a ON mp.animal_id = a.animal_tag
+          WHERE a.owner_id = ${farmerId}`, // Total milk production (last 30
+          days) `SELECT SUM(mp.quantity) as total_milk_production FROM
+          MilkProduction mp JOIN Animal a ON mp.animal_id = a.animal_tag WHERE
+          a.owner_id = ${farmerId} AND mp.production_date >= DATE_SUB(CURDATE(),
+          INTERVAL 30 DAY)`, // Average daily production `SELECT
+          AVG(daily_total) as avg_daily_production FROM (SELECT
+          DATE(mp.production_date) as production_date, SUM(mp.quantity) as
+          daily_total FROM MilkProduction mp JOIN Animal a ON mp.animal_id =
+          a.animal_tag WHERE a.owner_id = ${farmerId} AND mp.production_date >=
+          DATE_SUB(CURDATE(), INTERVAL 30 DAY) GROUP BY
+          DATE(mp.production_date)) as daily_production`, // Best performing
+          animal (last 30 days) `SELECT a.name as animal_name, a.animal_tag,
+          SUM(mp.quantity) as total_production FROM MilkProduction mp JOIN
+          Animal a ON mp.animal_id = a.animal_tag WHERE a.owner_id = ${farmerId}
+          AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) GROUP
+          BY a.animal_tag, a.name ORDER BY total_production DESC LIMIT 1`, //
+          Recent milk production (last 20) `SELECT mp.*, a.name as animal_name,
+          a.animal_tag FROM MilkProduction mp JOIN Animal a ON mp.animal_id =
+          a.animal_tag WHERE a.owner_id = ${farmerId} ORDER BY
+          mp.production_date DESC, mp.production_time DESC LIMIT 20`, //
+          Production by animal (for charts) `SELECT a.name as animal_name,
+          a.animal_tag, DATE(mp.production_date) as production_date,
+          SUM(mp.quantity) as daily_production FROM MilkProduction mp JOIN
+          Animal a ON mp.animal_id = a.animal_tag WHERE a.owner_id = ${farmerId}
+          AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 15 DAY) GROUP
+          BY a.animal_tag, a.name, DATE(mp.production_date) ORDER BY
+          production_date DESC, daily_production DESC` ]; });
+          app.post("/add-milk-production", (req, res) => { // Insert milk
+          production into database const insertProductionQuery = `INSERT INTO
+          MilkProduction (animal_id, production_date, production_time, quantity,
+          quality, unit) VALUES (?, ?, ?, ?, ?, 'Liters')`; });
+        </div>
+
+        <h4>Database Schema</h4>
+        <div class="code-block">
+          -- MilkProduction Table CREATE TABLE MilkProduction ( production_id
+          INT AUTO_INCREMENT PRIMARY KEY, animal_id VARCHAR(20) NOT NULL,
+          production_date DATE NOT NULL, production_time TIME NOT NULL, quantity
+          DECIMAL(8,2) NOT NULL, quality VARCHAR(50) NULL, unit VARCHAR(20)
+          DEFAULT 'Liters', FOREIGN KEY (animal_id) REFERENCES
+          Animal(animal_tag) ON DELETE CASCADE );
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🎨 UI/UX Features</h3>
+        <div class="feature-demo">
+          <div class="demo-card">
+            <h4>Visual Design</h4>
+            <ul>
+              <li>Color-coded quality badges</li>
+              <li>Session-based time badges</li>
+              <li>Animal badges with emojis</li>
+              <li>Statistics cards with icons</li>
+              <li>Responsive chart layouts</li>
+            </ul>
+          </div>
+          <div class="demo-card">
+            <h4>User Experience</h4>
+            <ul>
+              <li>Modal forms for easy recording</li>
+              <li>Auto-populated date/time</li>
+              <li>Real-time form validation</li>
+              <li>Success messages for feedback</li>
+              <li>Empty states with guidance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📱 Responsive Design</h3>
+        <div class="feature-list">
+          <h4>Mobile Optimization</h4>
+          <ul>
+            <li>
+              <strong>Mobile Navigation:</strong> Integrated with existing
+              mobile nav
+            </li>
+            <li>
+              <strong>Touch-friendly Forms:</strong> Large buttons and inputs
+            </li>
+            <li>
+              <strong>Responsive Charts:</strong> Charts adapt to screen size
+            </li>
+            <li>
+              <strong>Modal Forms:</strong> Full-screen experience on mobile
+            </li>
+            <li><strong>Grid Layouts:</strong> Adaptive grid systems</li>
+            <li><strong>Form Rows:</strong> Single column on mobile</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🧪 Testing Instructions</h3>
+        <div class="testing-steps">
+          <h4>Manual Testing Steps</h4>
+          <ol>
+            <li>Start your Node.js server: <code>node server.js</code></li>
+            <li>Open <code>http://localhost:3000</code> in your browser</li>
+            <li>Login with existing farmer credentials</li>
+            <li>Navigate to the milk production dashboard</li>
+            <li>Test adding a new milk production record</li>
+            <li>Verify statistics update correctly</li>
+            <li>Check individual animal charts</li>
+            <li>Test different quality levels</li>
+            <li>Verify session badges (morning/afternoon/evening)</li>
+            <li>Test responsive design on different screen sizes</li>
+          </ol>
+        </div>
+
+        <div class="testing-steps">
+          <h4>Test Scenarios</h4>
+          <ol>
+            <li>
+              <strong>Production Recording:</strong> Add production records with
+              different animals and quantities
+            </li>
+            <li>
+              <strong>Quality Tracking:</strong> Test High, Medium, Low quality
+              assessments
+            </li>
+            <li>
+              <strong>Session Detection:</strong> Verify morning, afternoon,
+              evening session badges
+            </li>
+            <li>
+              <strong>Chart Generation:</strong> Test individual animal charts
+              with multiple records
+            </li>
+            <li>
+              <strong>Statistics Calculation:</strong> Verify totals, averages,
+              and best performer
+            </li>
+            <li>
+              <strong>Form Validation:</strong> Test required field validation
+            </li>
+            <li>
+              <strong>Empty States:</strong> Test when no production records
+              exist
+            </li>
+            <li>
+              <strong>Date/Time Handling:</strong> Test date and time picker
+              functionality
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔗 Integration Benefits</h3>
+        <p>The milk production management system provides:</p>
+        <ul>
+          <li>
+            <strong>Complete Production Tracking:</strong> Track all milk
+            production and quality
+          </li>
+          <li>
+            <strong>Performance Analytics:</strong> Detailed production analysis
+            and insights
+          </li>
+          <li>
+            <strong>Animal Performance:</strong> Individual animal performance
+            monitoring
+          </li>
+          <li>
+            <strong>Quality Management:</strong> Milk quality assessment and
+            tracking
+          </li>
+          <li>
+            <strong>Session Management:</strong> Time-based production session
+            tracking
+          </li>
+          <li>
+            <strong>Visual Analytics:</strong> Interactive charts for production
+            trends
+          </li>
+          <li>
+            <strong>Mobile Accessibility:</strong> Access all features on any
+            device
+          </li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h3>🚀 Future Enhancements</h3>
+        <p>Potential improvements for future versions:</p>
+        <ul>
+          <li>Production forecasting and predictions</li>
+          <li>Milk quality testing integration</li>
+          <li>Production alerts and notifications</li>
+          <li>Export production reports</li>
+          <li>Integration with milk buyers</li>
+          <li>Production cost analysis</li>
+          <li>Seasonal production patterns</li>
+          <li>Production benchmarking</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

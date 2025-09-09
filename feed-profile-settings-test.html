@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feed Consumption, Farmer Profile & Settings Test - Dairyman</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+      }
+      .test-section h3 {
+        color: #2c6e49;
+        margin-top: 0;
+      }
+      .feature-demo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .demo-card {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .demo-card h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .feature-list {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .feature-list h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .feature-list ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .feature-list li {
+        margin-bottom: 8px;
+      }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 10px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        overflow-x: auto;
+      }
+      .testing-steps {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .testing-steps h4 {
+        margin-top: 0;
+        color: #856404;
+      }
+      .testing-steps ol {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .testing-steps li {
+        margin-bottom: 8px;
+      }
+      .feed-features {
+        background: #d1ecf1;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .profile-features {
+        background: #d4edda;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .settings-features {
+        background: #f8d7da;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .feed-features h4 {
+        color: #0c5460;
+        margin-top: 0;
+      }
+      .profile-features h4 {
+        color: #155724;
+        margin-top: 0;
+      }
+      .settings-features h4 {
+        color: #721c24;
+        margin-top: 0;
+      }
+      @media (max-width: 768px) {
+        .feature-demo {
+          grid-template-columns: 1fr;
+        }
+        .test-container {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🌾👤⚙️ Feed Consumption, Farmer Profile & Settings - Dairyman</h1>
+      <p>
+        This page demonstrates the comprehensive feed consumption tracking,
+        farmer profile management, and settings features implemented for the
+        Dairyman application, providing farmers with complete farm management
+        capabilities.
+      </p>
+
+      <div class="test-section">
+        <h3>🎯 Feature Overview</h3>
+        <div class="feature-demo">
+          <div class="demo-card">
+            <h4>🌾 Feed Consumption Management</h4>
+            <p>Complete feed tracking system with:</p>
+            <ul>
+              <li>Feed consumption records</li>
+              <li>Cost tracking and analytics</li>
+              <li>Animal-specific feed logs</li>
+              <li>Feed type categorization</li>
+            </ul>
+          </div>
+          <div class="demo-card">
+            <h4>👤 Farmer Profile Management</h4>
+            <p>Comprehensive profile system with:</p>
+            <ul>
+              <li>Personal information display</li>
+              <li>Farm statistics overview</li>
+              <li>Profile editing capabilities</li>
+              <li>Account information management</li>
+            </ul>
+          </div>
+          <div class="demo-card">
+            <h4>⚙️ Settings & Security</h4>
+            <p>Complete settings system with:</p>
+            <ul>
+              <li>Password management</li>
+              <li>Account information display</li>
+              <li>Application preferences</li>
+              <li>System information</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🌾 Feed Consumption Dashboard Features</h3>
+        <div class="feed-features">
+          <h4>Key Feed Consumption Features</h4>
+          <ul>
+            <li>
+              <strong>Statistics Cards:</strong> Total feed records, 30-day
+              cost, and daily average cost
+            </li>
+            <li>
+              <strong>Feed Records Table:</strong> Recent feed consumption with
+              animal details and timestamps
+            </li>
+            <li>
+              <strong>Add Feed Modal:</strong> Comprehensive form for recording
+              new feed consumption
+            </li>
+            <li>
+              <strong>Animal Selection:</strong> Dropdown with all active
+              animals
+            </li>
+            <li>
+              <strong>Feed Types:</strong> Pre-defined common feed types (Napier
+              Grass, Dairy Meal, Hay, etc.)
+            </li>
+            <li>
+              <strong>Cost Tracking:</strong> Individual and aggregate cost
+              tracking
+            </li>
+            <li>
+              <strong>Quantity Management:</strong> Precise quantity tracking in
+              kilograms
+            </li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>Feed Consumption Form Fields</h4>
+          <ul>
+            <li>
+              <strong>Animal Selection:</strong> Choose from active animals
+            </li>
+            <li><strong>Feed Type:</strong> Dropdown with common feed types</li>
+            <li><strong>Quantity:</strong> Amount in kilograms</li>
+            <li><strong>Cost:</strong> Cost in Kenyan Shillings</li>
+            <li>
+              <strong>Auto-timestamp:</strong> Automatic date/time recording
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>👤 Farmer Profile Dashboard Features</h3>
+        <div class="profile-features">
+          <h4>Key Profile Features</h4>
+          <ul>
+            <li>
+              <strong>Statistics Overview:</strong> Total animals, production,
+              expenses, and registration date
+            </li>
+            <li>
+              <strong>Personal Information Display:</strong> Name, email, phone,
+              county
+            </li>
+            <li>
+              <strong>Farm Information Display:</strong> Farm name, location,
+              registration date
+            </li>
+            <li>
+              <strong>Profile Editing Form:</strong> Update personal and farm
+              information
+            </li>
+            <li>
+              <strong>Session Integration:</strong> Real-time session updates
+            </li>
+            <li>
+              <strong>Data Validation:</strong> Form validation and error
+              handling
+            </li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>Profile Form Fields</h4>
+          <ul>
+            <li><strong>Full Name:</strong> Required field</li>
+            <li><strong>Email:</strong> Required field with validation</li>
+            <li><strong>Phone:</strong> Optional contact number</li>
+            <li><strong>County:</strong> Optional location information</li>
+            <li><strong>Farm Name:</strong> Optional farm identification</li>
+            <li><strong>Farm Location:</strong> Optional detailed location</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>⚙️ Settings Dashboard Features</h3>
+        <div class="settings-features">
+          <h4>Key Settings Features</h4>
+          <ul>
+            <li>
+              <strong>Account Information:</strong> Display current account
+              details
+            </li>
+            <li>
+              <strong>Password Management:</strong> Secure password change
+              functionality
+            </li>
+            <li>
+              <strong>Application Settings:</strong> Toggle switches for
+              preferences
+            </li>
+            <li>
+              <strong>System Information:</strong> Version, status, and system
+              details
+            </li>
+            <li>
+              <strong>Security Features:</strong> Password validation and
+              confirmation
+            </li>
+            <li>
+              <strong>Danger Zone:</strong> Account deletion and data export
+              options
+            </li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>Settings Sections</h4>
+          <ul>
+            <li><strong>Account Information:</strong> Current user details</li>
+            <li><strong>Security Settings:</strong> Password change form</li>
+            <li><strong>Application Settings:</strong> Toggle preferences</li>
+            <li><strong>System Information:</strong> Technical details</li>
+            <li><strong>Danger Zone:</strong> Destructive actions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔧 Technical Implementation</h3>
+        <h4>Backend Routes</h4>
+        <div class="code-block">
+          // Feed Consumption Routes app.get("/feed-consumption", (req, res) =>
+          { // Get feed consumption statistics and records const queries = [ //
+          Total feed consumption count `SELECT COUNT(*) as total_feed_records
+          FROM FeedConsumption fc JOIN Animal a ON fc.animalfed = a.animal_tag
+          WHERE a.owner_id = ${farmerId}`, // Total feed cost (last 30 days)
+          `SELECT SUM(fc.cost) as total_feed_cost FROM FeedConsumption fc JOIN
+          Animal a ON fc.animalfed = a.animal_tag WHERE a.owner_id = ${farmerId}
+          AND fc.date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`, // Recent feed
+          consumption (last 15) `SELECT fc.*, a.name as animal_name,
+          a.animal_tag FROM FeedConsumption fc JOIN Animal a ON fc.animalfed =
+          a.animal_tag WHERE a.owner_id = ${farmerId} ORDER BY fc.date DESC
+          LIMIT 15` ]; }); app.post("/add-feed-consumption", (req, res) => { //
+          Insert feed consumption into database const insertFeedQuery = `INSERT
+          INTO FeedConsumption (animalfed, quantity, type, cost, date) VALUES
+          (?, ?, ?, ?, NOW())`; }); // Farmer Profile Routes
+          app.get("/farmer-profile", (req, res) => { // Get farmer profile data
+          and statistics }); app.post("/update-farmer-profile", (req, res) => {
+          // Update farmer profile information const updateQuery = `UPDATE
+          Farmers SET fullname = ?, phone = ?, email = ?, county = ?,
+          farm_location = ?, farm_name = ? WHERE farmer_id = ?`; }); // Settings
+          Routes app.get("/settings", (req, res) => { // Display settings page
+          }); app.post("/update-password", (req, res) => { // Update user
+          password with validation });
+        </div>
+
+        <h4>Database Schema</h4>
+        <div class="code-block">
+          -- FeedConsumption Table CREATE TABLE FeedConsumption ( id_feed INT
+          AUTO_INCREMENT PRIMARY KEY, animalfed VARCHAR(20) NOT NULL, quantity
+          DECIMAL(8,2) NOT NULL, type VARCHAR(50) NOT NULL, cost DECIMAL(10,2)
+          NOT NULL, date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN
+          KEY (animalfed) REFERENCES Animal(animal_tag) ); -- Farmers Table
+          (existing) CREATE TABLE Farmers ( farmer_id INT AUTO_INCREMENT PRIMARY
+          KEY, fullname VARCHAR(100) NOT NULL, phone VARCHAR(255), email
+          VARCHAR(100) UNIQUE, password VARCHAR(255) NOT NULL, county
+          VARCHAR(100), farm_location VARCHAR(255), farm_name VARCHAR(100),
+          registration_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP );
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🎨 UI/UX Features</h3>
+        <div class="feature-demo">
+          <div class="demo-card">
+            <h4>Visual Design</h4>
+            <ul>
+              <li>Color-coded badges for feed types</li>
+              <li>Animal badges with emojis and tags</li>
+              <li>Statistics cards with icons</li>
+              <li>Toggle switches for settings</li>
+              <li>Responsive design for all devices</li>
+            </ul>
+          </div>
+          <div class="demo-card">
+            <h4>User Experience</h4>
+            <ul>
+              <li>Modal forms for easy data entry</li>
+              <li>Real-time form validation</li>
+              <li>Success messages for feedback</li>
+              <li>Empty states with helpful guidance</li>
+              <li>Intuitive navigation and layout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📱 Responsive Design</h3>
+        <div class="feature-list">
+          <h4>Mobile Optimization</h4>
+          <ul>
+            <li>
+              <strong>Mobile Navigation:</strong> Integrated with existing
+              mobile nav
+            </li>
+            <li>
+              <strong>Touch-friendly Forms:</strong> Large buttons and inputs
+            </li>
+            <li>
+              <strong>Responsive Tables:</strong> Optimized for small screens
+            </li>
+            <li>
+              <strong>Modal Forms:</strong> Full-screen experience on mobile
+            </li>
+            <li><strong>Grid Layouts:</strong> Adaptive grid systems</li>
+            <li><strong>Form Rows:</strong> Single column on mobile</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🧪 Testing Instructions</h3>
+        <div class="testing-steps">
+          <h4>Manual Testing Steps</h4>
+          <ol>
+            <li>Start your Node.js server: <code>node server.js</code></li>
+            <li>Open <code>http://localhost:3000</code> in your browser</li>
+            <li>Login with existing farmer credentials</li>
+            <li>Navigate to the feed consumption dashboard</li>
+            <li>Test adding a new feed consumption record</li>
+            <li>Verify statistics update correctly</li>
+            <li>Navigate to the farmer profile page</li>
+            <li>Test updating profile information</li>
+            <li>Navigate to the settings page</li>
+            <li>Test password change functionality</li>
+            <li>Test responsive design on different screen sizes</li>
+          </ol>
+        </div>
+
+        <div class="testing-steps">
+          <h4>Test Scenarios</h4>
+          <ol>
+            <li>
+              <strong>Feed Recording:</strong> Add feed consumption with
+              different types and quantities
+            </li>
+            <li>
+              <strong>Cost Tracking:</strong> Verify cost calculations and
+              statistics
+            </li>
+            <li>
+              <strong>Profile Updates:</strong> Update personal and farm
+              information
+            </li>
+            <li>
+              <strong>Password Changes:</strong> Test secure password updates
+            </li>
+            <li>
+              <strong>Form Validation:</strong> Test required field validation
+            </li>
+            <li>
+              <strong>Success Messages:</strong> Verify success feedback after
+              operations
+            </li>
+            <li><strong>Empty States:</strong> Test when no records exist</li>
+            <li>
+              <strong>Session Updates:</strong> Verify session data updates
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔗 Integration Benefits</h3>
+        <p>
+          The feed consumption, farmer profile, and settings features provide:
+        </p>
+        <ul>
+          <li>
+            <strong>Complete Feed Management:</strong> Track all feed
+            consumption and costs
+          </li>
+          <li>
+            <strong>Profile Management:</strong> Easy profile updates and
+            information management
+          </li>
+          <li>
+            <strong>Security Features:</strong> Secure password management and
+            account security
+          </li>
+          <li>
+            <strong>Cost Analytics:</strong> Detailed feed cost tracking and
+            analysis
+          </li>
+          <li>
+            <strong>User Experience:</strong> Intuitive interfaces for all
+            operations
+          </li>
+          <li>
+            <strong>Data Integrity:</strong> Proper validation and error
+            handling
+          </li>
+          <li>
+            <strong>Mobile Accessibility:</strong> Access all features on any
+            device
+          </li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h3>🚀 Future Enhancements</h3>
+        <p>Potential improvements for future versions:</p>
+        <ul>
+          <li>Feed cost analytics and trends</li>
+          <li>Feed inventory management</li>
+          <li>Profile picture upload</li>
+          <li>Two-factor authentication</li>
+          <li>Data export functionality</li>
+          <li>Notification preferences</li>
+          <li>Feed recommendation system</li>
+          <li>Integration with feed suppliers</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

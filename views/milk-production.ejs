@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milk Production Management</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="mobile-nav.js"></script>
+  </head>
+  <body>
+    <%- include("_dashheader.ejs")%>
+    <main>
+      <%- include("_dashnav.ejs")%>
+      <section class="main-content">
+        <% if (locals.successMessage) { %>
+        <div class="success-message">
+          <p><%= locals.successMessage %></p>
+          <button class="close-success">×</button>
+        </div>
+        <% } %>
+
+        <div class="section-header">
+          <h2>🥛 Milk Production Management</h2>
+          <button class="btn" id="addProductionBtn">
+            Record Milk Production
+          </button>
+        </div>
+
+        <!-- Milk Production Summary Cards -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+              <h3><%= totalProductionRecords %></h3>
+              <p>Total Records</p>
+              <span class="stat-trend">All time</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-success">
+            <div class="stat-icon">🥛</div>
+            <div class="stat-content">
+              <h3><%= totalMilkProduction.toFixed(1) %>L</h3>
+              <p>30-Day Production</p>
+              <span class="stat-trend">Last 30 days</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-info">
+            <div class="stat-icon">📈</div>
+            <div class="stat-content">
+              <h3><%= avgDailyProduction.toFixed(1) %>L</h3>
+              <p>Daily Average</p>
+              <span class="stat-trend">Per day</span>
+            </div>
+          </div>
+
+          <% if (bestAnimal) { %>
+          <div class="stat-card stat-warning">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-content">
+              <h3><%= bestAnimal.animal_name %></h3>
+              <p>Top Performer</p>
+              <span class="stat-trend"
+                ><%= bestAnimal.total_production.toFixed(1) %>L (30 days)</span
+              >
+            </div>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- Production Charts Section -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h3>📈 Production Trends</h3>
+            <p>Individual animal performance over the last 15 days</p>
+          </div>
+
+          <% if (Object.keys(chartData).length > 0) { %>
+          <div class="charts-grid">
+            <% for (const animal in chartData){ %>
+            <div class="chart-wrapper">
+              <div class="chart-header">
+                <h3 class="chart-title">
+                  <span class="animal-emoji">🐄</span>
+                  <%= chartData[animal].animal_name %>
+                </h3>
+                <div class="chart-stats">
+                  <span class="latest-production">
+                    Latest: <%= chartData[animal].daily_productions[0] || 0 %>L
+                  </span>
+                </div>
+              </div>
+              <canvas id="<%=animal%>" class="animal-chart"></canvas>
+            </div>
+            <% } %>
+          </div>
+          <% } else { %>
+          <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <h3>No Production Data</h3>
+            <p>Start recording milk production to see charts here</p>
+            <button class="btn" id="addFirstProductionBtn">
+              Record First Production
+            </button>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- Recent Production Records Table -->
+        <div class="table-section">
+          <h3>Recent Production Records</h3>
+          <div class="table-container">
+            <% if (recentProduction.length > 0) { %>
+            <table class="expenses-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Animal</th>
+                  <th>Quantity</th>
+                  <th>Quality</th>
+                  <th>Session</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentProduction.forEach(production => { %>
+                <tr>
+                  <td>
+                    <%= new
+                    Date(production.production_date).toLocaleDateString() %>
+                    <small
+                      ><%= new
+                      Date(production.production_time).toLocaleTimeString()
+                      %></small
+                    >
+                  </td>
+                  <td>
+                    <span class="animal-badge">
+                      🐄 <%= production.animal_name %> (<%=
+                      production.animal_tag %>)
+                    </span>
+                  </td>
+                  <td class="quantity"><%= production.quantity %>L</td>
+                  <td>
+                    <span
+                      class="quality-badge quality-<%= production.quality ? production.quality.toLowerCase() : 'unknown' %>"
+                    >
+                      <%= production.quality || 'Not specified' %>
+                    </span>
+                  </td>
+                  <td>
+                    <% const hour = new
+                    Date(production.production_time).getHours(); %> <% if (hour
+                    >= 5 && hour < 12) { %>
+                    <span class="session-badge session-morning">Morning</span>
+                    <% } else if (hour >= 12 && hour < 18) { %>
+                    <span class="session-badge session-afternoon"
+                      >Afternoon</span
+                    >
+                    <% } else { %>
+                    <span class="session-badge session-evening">Evening</span>
+                    <% } %>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <div class="table-footer">
+              <a href="#" class="btn btn-secondary"
+                >View All Production Records</a
+              >
+            </div>
+            <% } else { %>
+            <div class="empty-state">
+              <div class="empty-icon">🥛</div>
+              <h3>No Production Records</h3>
+              <p>
+                Start recording milk production to track your animals'
+                performance
+              </p>
+              <button class="btn" id="addFirstProductionBtn2">
+                Record First Production
+              </button>
+            </div>
+            <% } %>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Add Milk Production Modal -->
+    <div class="modal-overlay" id="productionModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Record Milk Production</h3>
+          <button class="modal-close" id="closeProductionModal">×</button>
+        </div>
+        <form id="productionForm" action="/add-milk-production" method="POST">
+          <div class="form-group">
+            <label for="animal_id">Animal *</label>
+            <select id="animal_id" name="animal_id" required>
+              <option value="">Select animal</option>
+              <% animals.forEach(animal => { %>
+              <option value="<%= animal.animal_tag %>">
+                <%= animal.name %> (<%= animal.animal_tag %>)
+              </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="production_date">Date *</label>
+              <input
+                type="date"
+                id="production_date"
+                name="production_date"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="production_time">Time *</label>
+              <input
+                type="time"
+                id="production_time"
+                name="production_time"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">Quantity (Liters) *</label>
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              step="0.1"
+              min="0.1"
+              required
+              placeholder="0.0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="quality">Quality</label>
+            <select id="quality" name="quality">
+              <option value="">Select quality</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="cancelProduction"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn">Record Production</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Modal functionality
+      const addProductionBtn = document.getElementById("addProductionBtn");
+      const addFirstProductionBtn = document.getElementById("addFirstProductionBtn");
+      const addFirstProductionBtn2 = document.getElementById("addFirstProductionBtn2");
+      const productionModal = document.getElementById("productionModal");
+      const closeProductionModal = document.getElementById("closeProductionModal");
+      const cancelProduction = document.getElementById("cancelProduction");
+      const productionForm = document.getElementById("productionForm");
+
+      // Open modal functions
+      function openProductionModal() {
+        productionModal.style.display = "flex";
+        document.body.style.overflow = "hidden";
+        // Set today's date and current time as default
+        const now = new Date();
+        document.getElementById("production_date").value = now.toISOString().split("T")[0];
+        document.getElementById("production_time").value = now.toTimeString().slice(0, 5);
+      }
+
+      if (addProductionBtn) {
+        addProductionBtn.addEventListener("click", openProductionModal);
+      }
+
+      if (addFirstProductionBtn) {
+        addFirstProductionBtn.addEventListener("click", openProductionModal);
+      }
+
+      if (addFirstProductionBtn2) {
+        addFirstProductionBtn2.addEventListener("click", openProductionModal);
+      }
+
+      // Close modal functions
+      function closeProductionModalFunc() {
+        productionModal.style.display = "none";
+        document.body.style.overflow = "";
+        productionForm.reset();
+      }
+
+      if (closeProductionModal) {
+        closeProductionModal.addEventListener("click", closeProductionModalFunc);
+      }
+
+      if (cancelProduction) {
+        cancelProduction.addEventListener("click", closeProductionModalFunc);
+      }
+
+      // Close modal when clicking overlay
+      if (productionModal) {
+        productionModal.addEventListener("click", function (e) {
+          if (e.target === productionModal) {
+            closeProductionModalFunc();
+          }
+        });
+      }
+
+      // Close modal on escape key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && productionModal.style.display === "flex") {
+          closeProductionModalFunc();
+        }
+      });
+
+      // Form validation
+      if (productionForm) {
+        productionForm.addEventListener("submit", function (e) {
+          const quantity = parseFloat(document.getElementById("quantity").value);
+
+          if (quantity <= 0) {
+            e.preventDefault();
+            alert("Quantity must be greater than 0");
+            return false;
+          }
+        });
+      }
+
+      // Close success message
+      const closeSuccessBtn = document.querySelector(".close-success");
+      if (closeSuccessBtn) {
+        closeSuccessBtn.addEventListener("click", function () {
+          this.parentElement.style.display = "none";
+        });
+      }
+
+      // Chart functionality
+      const chartData = <%- JSON.stringify(chartData) %>;
+      const chartColors = [
+        '#2c6e49', '#4c956c', '#6bb77b', '#8fbc8f', '#98fb98',
+        '#90ee90', '#7ccd7c', '#66cdaa', '#20b2aa', '#5f9ea0'
+      ];
+
+      Object.keys(chartData).forEach((animalTag, index) => {
+        const animalData = chartData[animalTag];
+        const colorIndex = index % chartColors.length;
+
+        // Reverse arrays to show oldest to newest
+        const dates = animalData.production_dates.reverse();
+        const productions = animalData.daily_productions.reverse();
+
+        new Chart(animalTag, {
+          type: "line",
+          data: {
+            labels: dates.map(date => new Date(date).toLocaleDateString()),
+            datasets: [{
+              label: 'Daily Production (L)',
+              fill: true,
+              lineTension: 0.3,
+              backgroundColor: chartColors[colorIndex] + '20',
+              borderColor: chartColors[colorIndex],
+              borderWidth: 3,
+              pointBackgroundColor: chartColors[colorIndex],
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              data: productions,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleColor: 'white',
+                bodyColor: 'white',
+                borderColor: chartColors[colorIndex],
+                borderWidth: 1,
+                cornerRadius: 8,
+                displayColors: false
+              }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                  fontColor: '#666',
+                  fontFamily: 'Arial, sans-serif'
+                },
+                gridLines: {
+                  color: 'rgba(0,0,0,0.1)',
+                  drawBorder: false
+                }
+              }],
+              xAxes: [{
+                ticks: {
+                  fontColor: '#666',
+                  fontFamily: 'Arial, sans-serif',
+                  maxRotation: 45
+                },
+                gridLines: {
+                  color: 'rgba(0,0,0,0.1)',
+                  drawBorder: false
+                }
+              }]
+            },
+            elements: {
+              point: {
+                hoverBackgroundColor: chartColors[colorIndex]
+              }
+            }
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
