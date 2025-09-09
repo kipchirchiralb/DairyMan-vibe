@@ -2,8 +2,8 @@
 CREATE DATABASE IF NOT EXISTS dairyman;
 USE dairyman;
 
---  Farmers Table
-CREATE TABLE Farmers (
+--  farmers table
+CREATE TABLE farmers (
     farmer_id        INT AUTO_INCREMENT PRIMARY KEY,
     fullname             VARCHAR(100) NOT NULL,
     phone     VARCHAR(255),
@@ -16,9 +16,9 @@ CREATE TABLE Farmers (
 );
 
 -- ======================
--- 1. Animal Table
+-- 1. animal table
 -- ======================
-CREATE TABLE Animal (
+CREATE TABLE animal (
     animal_tag        VARCHAR(20) PRIMARY KEY,
     name              VARCHAR(100) NOT NULL,
     owner_id          INT,    
@@ -28,15 +28,15 @@ CREATE TABLE Animal (
     gender            ENUM('Male','Female') NOT NULL,
     source            ENUM('Birth','Purchase') NOT NULL,
     status            ENUM('Alive','Dead','Sold') NOT NULL DEFAULT 'Alive',
-    FOREIGN KEY (owner_id) REFERENCES Farmers(farmer_id)
+    FOREIGN KEY (owner_id) REFERENCES farmers(farmer_id)
         ON DELETE SET NULL
 
 );
 
 -- ======================
--- 2. MilkProduction Table
+-- 2. milkproduction table
 -- ======================
-CREATE TABLE MilkProduction (
+CREATE TABLE milkproduction (
     production_id     INT AUTO_INCREMENT PRIMARY KEY,
     animal_id         VARCHAR(20) NOT NULL,
     production_date   DATE NOT NULL,
@@ -44,14 +44,14 @@ CREATE TABLE MilkProduction (
     quantity          DECIMAL(8,2) NOT NULL,
     quality           VARCHAR(50) NULL,
     unit              VARCHAR(20) DEFAULT 'Liters',
-    FOREIGN KEY (animal_id) REFERENCES Animal(animal_tag)
+    FOREIGN KEY (animal_id) REFERENCES animal(animal_tag)
         ON DELETE CASCADE
 );
 
 -- ======================
--- 3. Sales Table
+-- 3. sales table
 -- ======================
-CREATE TABLE Sales (
+CREATE TABLE sales (
     sale_id           INT AUTO_INCREMENT PRIMARY KEY,
     sale_date         DATE NOT NULL,
     sale_type         ENUM('Milk','Mursik','Animal','Other') NOT NULL DEFAULT 'Milk',
@@ -61,14 +61,14 @@ CREATE TABLE Sales (
     unit              VARCHAR(20) NOT NULL,
     total_price       DECIMAL(12,2) GENERATED ALWAYS AS (price_per_unit * quantity) STORED,
     farmer_id         INT,
-    FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id)
+    FOREIGN KEY (farmer_id) REFERENCES farmers(farmer_id)
         ON DELETE SET NULL
 );
 
 -- ======================
--- 4. Medication Table
+-- 4. medication table
 -- ======================
-CREATE TABLE Medication (
+CREATE TABLE medication (
     medication_id     INT AUTO_INCREMENT PRIMARY KEY,
     animal_id        VARCHAR(20) NOT NULL,
     medication_name   VARCHAR(100) NOT NULL,
@@ -78,62 +78,62 @@ CREATE TABLE Medication (
     veterinary_name   VARCHAR(100),
     veterinary_remarks VARCHAR(255),
     notes             TEXT,
-    FOREIGN KEY (animal_id) REFERENCES Animal(animal_tag)
+    FOREIGN KEY (animal_id) REFERENCES animal(animal_tag)
         ON DELETE CASCADE
 );
 
 -- ======================
--- 5. Vaccination Table
+-- 5. vaccination table
 -- ======================
-CREATE TABLE Vaccination (
+CREATE TABLE vaccination (
     vaccination_id    INT AUTO_INCREMENT PRIMARY KEY,
     animal_id         VARCHAR(20) NOT NULL,
     vaccine_name      VARCHAR(100) NOT NULL,
     date_administered DATE NOT NULL,
     next_due_date     DATE NULL,
     notes             TEXT,
-    FOREIGN KEY (animal_id) REFERENCES Animal(animal_tag)
+    FOREIGN KEY (animal_id) REFERENCES animal(animal_tag)
         ON DELETE CASCADE
 );
 
 -- ======================
--- 6. Expenses Table
+-- 6. expenses table
 -- ======================
-CREATE TABLE Expenses (
+CREATE TABLE expenses (
     expense_id        INT AUTO_INCREMENT PRIMARY KEY,
     expense_date      DATE NOT NULL,
     expense_type      ENUM('Feeds','Vaccination','Medication','Maintenance','Labor','Insemination','Other') NOT NULL,
     description       VARCHAR(255),
     amount            DECIMAL(12,2) NOT NULL,
     farmer_id         INT,
-    FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id)
+    FOREIGN KEY (farmer_id) REFERENCES farmers(farmer_id)
         ON DELETE SET NULL
 );
 
 -- ======================
--- 7. Losses Table
+-- 7. losses table
 -- ======================
-CREATE TABLE Losses (
+CREATE TABLE losses (
     loss_id           INT AUTO_INCREMENT PRIMARY KEY,
     animal_id         VARCHAR(20) NOT NULL,
     loss_type         ENUM('Death','Accident','Theft') NOT NULL,
     date              DATE NOT NULL,
     notes             TEXT,
-    FOREIGN KEY (animal_id) REFERENCES Animal(animal_tag)
+    FOREIGN KEY (animal_id) REFERENCES animal(animal_tag)
         ON DELETE CASCADE
 );
 
 -- ======================
--- 8. FeedConsumption Table
+-- 8. feedconsumption table
 -- ======================
-CREATE TABLE FeedConsumption (
+CREATE TABLE feedconsumption (
     id_feed           INT AUTO_INCREMENT PRIMARY KEY,
     animalfed         VARCHAR(20) NOT NULL,
     quantity          DECIMAL(8,2) NOT NULL,
     type              VARCHAR(50) NOT NULL,
     cost              DECIMAL(10,2) NOT NULL,
     date              DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (animalfed) REFERENCES Animal(animal_tag)
+    FOREIGN KEY (animalfed) REFERENCES animal(animal_tag)
         ON DELETE CASCADE
 );
 
@@ -142,14 +142,14 @@ CREATE TABLE FeedConsumption (
 -- ====================== seeding data ======================
 
 -- Insert data for farmers 
-INSERT INTO Farmers (fullname, phone, email, password, county, farm_location, farm_name) VALUES
+INSERT INTO farmers (fullname, phone, email, password, county, farm_location, farm_name) VALUES
 ('John Mwangi', '0712345678', 'john@example.com', 'hashedpassword1', 'Nairobi', 'Kiambu Road', 'Green Pastures'),
 ('Mary Wanjiku', '0723456789', 'mary@example.com', 'hashedpassword2', 'Nakuru', 'Rongai', 'Sunny Farm');
 
 -- ======================
 -- 1. Animal Table (15 Records)
 -- ======================
-INSERT INTO Animal (animal_tag, name, owner_id, dob, purchase_date, breed, gender, source, status) VALUES
+INSERT INTO animal (animal_tag, name, owner_id, dob, purchase_date, breed, gender, source, status) VALUES
 ('A001', 'Kamau', 1, '2020-03-15', '2020-06-01', 'Friesian', 'Male', 'Purchase', 'Alive'),
 ('A002', 'Pendo', 1, '2019-08-22', NULL, 'Ayrshire', 'Female', 'Birth', 'Alive'),
 ('A003', 'Kadogo', 1, '2021-01-10', '2021-03-05', 'Guernsey', 'Female', 'Purchase', 'Alive'),
@@ -169,7 +169,7 @@ INSERT INTO Animal (animal_tag, name, owner_id, dob, purchase_date, breed, gende
 -- ======================
 -- 2. MilkProduction (15 Records)
 -- ======================
-INSERT INTO MilkProduction (animal_id, production_date, production_time, quantity, quality, unit) VALUES
+INSERT INTO milkproduction (animal_id, production_date, production_time, quantity, quality, unit) VALUES
 ('A002', '2023-08-01', '06:00:00', 12.5, 'High', 'Liters'),
 ('A003', '2023-08-01', '06:30:00', 10.2, 'Medium', 'Liters'),
 ('A005', '2023-08-01', '07:00:00', 8.7, 'High', 'Liters'),
@@ -189,7 +189,7 @@ INSERT INTO MilkProduction (animal_id, production_date, production_time, quantit
 -- ======================
 -- 3. Sales (15 Records)
 -- ======================
-INSERT INTO Sales (sale_date, sale_type, item_description, price_per_unit, quantity, unit, farmer_id) VALUES
+INSERT INTO sales (sale_date, sale_type, item_description, price_per_unit, quantity, unit, farmer_id) VALUES
 ('2023-08-05', 'Milk', 'Fresh milk sold to local market', 50.00, 20, 'Liters', 1),
 ('2023-08-06', 'Milk', 'Milk supplied to school', 45.00, 50, 'Liters', 1),
 ('2023-08-07', 'Milk', 'Fresh milk to hotel', 55.00, 30, 'Liters', 1),
@@ -209,7 +209,7 @@ INSERT INTO Sales (sale_date, sale_type, item_description, price_per_unit, quant
 -- ======================
 -- 4. Medication (15 Records)
 -- ======================
-INSERT INTO Medication (animal_id, medication_name, dose, start_date, end_date, veterinary_name, veterinary_remarks, notes) VALUES
+INSERT INTO medication (animal_id, medication_name, dose, start_date, end_date, veterinary_name, veterinary_remarks, notes) VALUES
 ('A002', 'Antibiotics', '10ml', '2023-07-01', '2023-07-05', 'Dr. Kiptoo', 'Responding well', 'For mastitis'),
 ('A003', 'Dewormer', '15ml', '2023-06-15', NULL, 'Dr. Wambui', 'Normal', 'Routine deworming'),
 ('A005', 'Vitamin Supplement', '20ml', '2023-07-10', '2023-07-12', 'Dr. Mwangi', 'Good recovery', 'Weakness observed'),
@@ -229,7 +229,7 @@ INSERT INTO Medication (animal_id, medication_name, dose, start_date, end_date, 
 -- ======================
 -- 5. Vaccination (15 Records)
 -- ======================
-INSERT INTO Vaccination (animal_id, vaccine_name, date_administered, next_due_date, notes) VALUES
+INSERT INTO vaccination (animal_id, vaccine_name, date_administered, next_due_date, notes) VALUES
 ('A002', 'FMD', '2023-01-10', '2024-01-10', 'Routine vaccination'),
 ('A003', 'Lumpy Skin', '2023-02-15', '2024-02-15', 'Annual dose'),
 ('A005', 'CBPP', '2023-03-05', '2024-03-05', 'Protective vaccine'),
@@ -249,7 +249,7 @@ INSERT INTO Vaccination (animal_id, vaccine_name, date_administered, next_due_da
 -- ======================
 -- 6. Expenses (15 Records)
 -- ======================
-INSERT INTO Expenses (expense_date, expense_type, description, amount, farmer_id) VALUES
+INSERT INTO expenses (expense_date, expense_type, description, amount, farmer_id) VALUES
 ('2023-08-01', 'Feeds', 'Napier grass purchase', 5000.00, 1),
 ('2023-08-02', 'Vaccination', 'FMD vaccine costs', 2000.00, 1),
 ('2023-08-03', 'Medication', 'Antibiotics for A002', 1500.00, 1),
@@ -269,7 +269,7 @@ INSERT INTO Expenses (expense_date, expense_type, description, amount, farmer_id
 -- ======================
 -- 7. Losses (15 Records) - Only using animals that exist
 -- ======================
-INSERT INTO Losses (animal_id, loss_type, date, notes) VALUES
+INSERT INTO losses (animal_id, loss_type, date, notes) VALUES
 ('A004', 'Death', '2022-05-10', 'Died due to pneumonia'),
 ('A006', 'Theft', '2021-11-15', 'Stolen from grazing field')
 
@@ -277,7 +277,7 @@ INSERT INTO Losses (animal_id, loss_type, date, notes) VALUES
 -- ======================
 -- 8. FeedConsumption (15 Records)
 -- ======================
-INSERT INTO FeedConsumption (animalfed, quantity, type, cost, date) VALUES
+INSERT INTO feedconsumption (animalfed, quantity, type, cost, date) VALUES
 ('A002', 15.0, 'Napier Grass', 750.00, '2023-08-01 08:00:00'),
 ('A003', 10.0, 'Dairy Meal', 1200.00, '2023-08-01 08:30:00'),
 ('A005', 12.0, 'Hay', 600.00, '2023-08-01 09:00:00'),
@@ -298,26 +298,26 @@ INSERT INTO FeedConsumption (animalfed, quantity, type, cost, date) VALUES
 --  fetch all milk production records for a farmer
 
 SELECT 
-    Animal.animal_tag,
-    Animal.name as animal_name,
-    MilkProduction.production_date,
-    SUM(MilkProduction.quantity) as total_daily_production,
+    animal.animal_tag,
+    animal.name as animal_name,
+    milkproduction.production_date,
+    SUM(milkproduction.quantity) as total_daily_production,
     COUNT(*) as milking_sessions,
-    Farmers.farm_name,
-    MilkProduction.unit
-FROM MilkProduction 
-JOIN Animal ON MilkProduction.animal_id = Animal.animal_tag
-JOIN Farmers ON Animal.owner_id = Farmers.farmer_id
-WHERE Farmers.farmer_id = 1
-GROUP BY Animal.animal_tag, Animal.name, MilkProduction.production_date, Farmers.farm_name, MilkProduction.unit
-ORDER BY MilkProduction.production_date DESC;
+    farmers.farm_name,
+    milkproduction.unit
+FROM milkproduction 
+JOIN animal ON milkproduction.animal_id = animal.animal_tag
+JOIN farmers ON animal.owner_id = farmers.farmer_id
+WHERE farmers.farmer_id = 1
+GROUP BY animal.animal_tag, animal.name, milkproduction.production_date, farmers.farm_name, milkproduction.unit
+ORDER BY milkproduction.production_date DESC;
 
 
 
 -- more porduction records
 
 -- Insert 30 milk production records for John's animals
-INSERT INTO MilkProduction (animal_id, production_date, production_time, quantity, quality, unit) VALUES
+INSERT INTO milkproduction (animal_id, production_date, production_time, quantity, quality, unit) VALUES
 ('A002', '2023-09-01', '06:00:00', 12.3, 'High', 'Liters'),
 ('A002', '2023-09-01', '18:00:00', 11.8, 'High', 'Liters'),
 ('A002', '2023-09-02', '06:00:00', 12.5, 'High', 'Liters'),

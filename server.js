@@ -151,34 +151,34 @@ app.get("/dashboard", (req, res) => {
       // Get additional dashboard statistics
       const queries = [
         // Total animals count
-        `SELECT COUNT(*) as total_animals FROM Animal WHERE owner_id = ${farmerId} AND status = 'Alive'`,
+        `SELECT COUNT(*) as total_animals FROM animal WHERE owner_id = ${farmerId} AND status = 'Alive'`,
 
         // Total milk production (last 30 days)
         `SELECT SUM(mp.quantity) as total_production 
-         FROM MilkProduction mp 
-         JOIN Animal a ON mp.animal_id = a.animal_tag 
+         FROM milkproduction mp 
+         JOIN animal a ON mp.animal_id = a.animal_tag 
          WHERE a.owner_id = ${farmerId} 
          AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
 
         // Average daily production
         `SELECT AVG(daily_total) as avg_daily FROM (
           SELECT DATE(mp.production_date) as production_date, SUM(mp.quantity) as daily_total 
-          FROM MilkProduction mp 
-          JOIN Animal a ON mp.animal_id = a.animal_tag 
+          FROM milkproduction mp 
+          JOIN animal a ON mp.animal_id = a.animal_tag 
           WHERE a.owner_id = ${farmerId} 
           AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
           GROUP BY DATE(mp.production_date)
         ) as daily_production`,
 
         // Total expenses (last 30 days)
-        `SELECT SUM(amount) as total_expenses FROM Expenses WHERE farmer_id = ${farmerId} AND expense_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
+        `SELECT SUM(amount) as total_expenses FROM expenses WHERE farmer_id = ${farmerId} AND expense_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
 
         // Recent activities (last 5)
         `(SELECT 'milk_production' as type, mp.production_date as activity_date, 
                   CONCAT('Milk production: ', SUM(mp.quantity), 'L from ', COUNT(DISTINCT mp.animal_id), ' animals') as description,
                   GROUP_CONCAT(DISTINCT a.name) as animal_name
-           FROM MilkProduction mp 
-           JOIN Animal a ON mp.animal_id = a.animal_tag 
+           FROM milkproduction mp 
+           JOIN animal a ON mp.animal_id = a.animal_tag 
            WHERE a.owner_id = ${farmerId} 
            GROUP BY mp.production_date 
            ORDER BY mp.production_date DESC 
@@ -187,7 +187,7 @@ app.get("/dashboard", (req, res) => {
            (SELECT 'expense' as type, expense_date as activity_date, 
                    CONCAT('Expense: ', expense_type, ' - KSh ', amount) as description,
                    NULL as animal_name
-            FROM Expenses 
+            FROM expenses 
             WHERE farmer_id = ${farmerId} 
             ORDER BY expense_date DESC 
             LIMIT 2)
@@ -249,27 +249,27 @@ app.get("/vaccination", (req, res) => {
   const queries = [
     // Total vaccinations count
     `SELECT COUNT(*) as total_vaccinations 
-     FROM Vaccination v 
-     JOIN Animal a ON v.animal_id = a.animal_tag 
+     FROM vaccination v 
+     JOIN animal a ON v.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId}`,
 
     // Vaccinations due soon (next 30 days)
     `SELECT COUNT(*) as due_soon 
-     FROM Vaccination v 
-     JOIN Animal a ON v.animal_id = a.animal_tag 
+     FROM vaccination v 
+     JOIN animal a ON v.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      AND v.next_due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)`,
 
     // Recent vaccinations (last 15)
     `SELECT v.*, a.name as animal_name, a.animal_tag
-     FROM Vaccination v 
-     JOIN Animal a ON v.animal_id = a.animal_tag 
+     FROM vaccination v 
+     JOIN animal a ON v.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      ORDER BY v.date_administered DESC 
      LIMIT 15`,
 
     // Animals for dropdown
-    `SELECT animal_tag, name FROM Animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
+    `SELECT animal_tag, name FROM animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
   ];
 
   Promise.all(
@@ -312,7 +312,7 @@ app.post("/add-vaccination", (req, res) => {
   }
 
   // Insert vaccination into database
-  const insertVaccinationQuery = `INSERT INTO Vaccination (animal_id, vaccine_name, date_administered, next_due_date, notes) VALUES (?, ?, ?, ?, ?)`;
+  const insertVaccinationQuery = `INSERT INTO vaccination (animal_id, vaccine_name, date_administered, next_due_date, notes) VALUES (?, ?, ?, ?, ?)`;
 
   dbConn.query(
     insertVaccinationQuery,
@@ -348,27 +348,27 @@ app.get("/medication", (req, res) => {
   const queries = [
     // Total medications count
     `SELECT COUNT(*) as total_medications 
-     FROM Medication m 
-     JOIN Animal a ON m.animal_id = a.animal_tag 
+     FROM medication m 
+     JOIN animal a ON m.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId}`,
 
     // Active medications (ongoing treatments)
     `SELECT COUNT(*) as active_medications 
-     FROM Medication m 
-     JOIN Animal a ON m.animal_id = a.animal_tag 
+     FROM medication m 
+     JOIN animal a ON m.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      AND (m.end_date IS NULL OR m.end_date > CURDATE())`,
 
     // Recent medications (last 15)
     `SELECT m.*, a.name as animal_name, a.animal_tag
-     FROM Medication m 
-     JOIN Animal a ON m.animal_id = a.animal_tag 
+     FROM medication m 
+     JOIN animal a ON m.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      ORDER BY m.start_date DESC 
      LIMIT 15`,
 
     // Animals for dropdown
-    `SELECT animal_tag, name FROM Animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
+    `SELECT animal_tag, name FROM animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
   ];
 
   Promise.all(
@@ -419,7 +419,7 @@ app.post("/add-medication", (req, res) => {
   }
 
   // Insert medication into database
-  const insertMedicationQuery = `INSERT INTO Medication (animal_id, medication_name, dose, start_date, end_date, veterinary_name, veterinary_remarks, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+  const insertMedicationQuery = `INSERT INTO medication (animal_id, medication_name, dose, start_date, end_date, veterinary_name, veterinary_remarks, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
   dbConn.query(
     insertMedicationQuery,
@@ -458,22 +458,22 @@ app.get("/feed-consumption", (req, res) => {
   const queries = [
     // Total feed consumption count
     `SELECT COUNT(*) as total_feed_records 
-     FROM FeedConsumption fc 
-     JOIN Animal a ON fc.animalfed = a.animal_tag 
+     FROM feedconsumption fc 
+     JOIN animal a ON fc.animalfed = a.animal_tag 
      WHERE a.owner_id = ${farmerId}`,
 
     // Total feed cost (last 30 days)
     `SELECT SUM(fc.cost) as total_feed_cost 
-     FROM FeedConsumption fc 
-     JOIN Animal a ON fc.animalfed = a.animal_tag 
+     FROM feedconsumption fc 
+     JOIN animal a ON fc.animalfed = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      AND fc.date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
 
     // Average daily feed cost
     `SELECT AVG(daily_total) as avg_daily_cost FROM (
       SELECT DATE(fc.date) as feed_date, SUM(fc.cost) as daily_total 
-      FROM FeedConsumption fc 
-      JOIN Animal a ON fc.animalfed = a.animal_tag 
+      FROM feedconsumption fc 
+      JOIN animal a ON fc.animalfed = a.animal_tag 
       WHERE a.owner_id = ${farmerId} 
       AND fc.date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
       GROUP BY DATE(fc.date)
@@ -481,14 +481,14 @@ app.get("/feed-consumption", (req, res) => {
 
     // Recent feed consumption (last 15)
     `SELECT fc.*, a.name as animal_name, a.animal_tag
-     FROM FeedConsumption fc 
-     JOIN Animal a ON fc.animalfed = a.animal_tag 
+     FROM feedconsumption fc 
+     JOIN animal a ON fc.animalfed = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      ORDER BY fc.date DESC 
      LIMIT 15`,
 
     // Animals for dropdown
-    `SELECT animal_tag, name FROM Animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
+    `SELECT animal_tag, name FROM animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
   ];
 
   Promise.all(
@@ -539,7 +539,7 @@ app.post("/add-feed-consumption", (req, res) => {
   }
 
   // Insert feed consumption into database
-  const insertFeedQuery = `INSERT INTO FeedConsumption (animalfed, quantity, type, cost, date) VALUES (?, ?, ?, ?, NOW())`;
+  const insertFeedQuery = `INSERT INTO feedconsumption (animalfed, quantity, type, cost, date) VALUES (?, ?, ?, ?, NOW())`;
 
   dbConn.query(
     insertFeedQuery,
@@ -567,7 +567,7 @@ app.get("/farmer-profile", (req, res) => {
 
   // Get farmer profile data
   dbConn.query(
-    `SELECT * FROM Farmers WHERE farmer_id = ${farmerId}`,
+    `SELECT * FROM farmers WHERE farmer_id = ${farmerId}`,
     (err, result) => {
       if (err) {
         console.log(err);
@@ -583,20 +583,20 @@ app.get("/farmer-profile", (req, res) => {
       // Get additional statistics
       const statsQueries = [
         // Total animals
-        `SELECT COUNT(*) as total_animals FROM Animal WHERE owner_id = ${farmerId}`,
+        `SELECT COUNT(*) as total_animals FROM animal WHERE owner_id = ${farmerId}`,
 
         // Total milk production (last 30 days)
         `SELECT SUM(mp.quantity) as total_production 
-         FROM MilkProduction mp 
-         JOIN Animal a ON mp.animal_id = a.animal_tag 
+         FROM milkproduction mp 
+         JOIN animal a ON mp.animal_id = a.animal_tag 
          WHERE a.owner_id = ${farmerId} 
          AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
 
         // Total expenses (last 30 days)
-        `SELECT SUM(amount) as total_expenses FROM Expenses WHERE farmer_id = ${farmerId} AND expense_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
+        `SELECT SUM(amount) as total_expenses FROM expenses WHERE farmer_id = ${farmerId} AND expense_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
 
         // Registration date
-        `SELECT registration_date FROM Farmers WHERE farmer_id = ${farmerId}`,
+        `SELECT registration_date FROM farmers WHERE farmer_id = ${farmerId}`,
       ];
 
       Promise.all(
@@ -644,7 +644,7 @@ app.post("/update-farmer-profile", (req, res) => {
   }
 
   // Update farmer profile
-  const updateQuery = `UPDATE Farmers SET fullname = ?, phone = ?, email = ?, county = ?, farm_location = ?, farm_name = ? WHERE farmer_id = ?`;
+  const updateQuery = `UPDATE farmers SET fullname = ?, phone = ?, email = ?, county = ?, farm_location = ?, farm_name = ? WHERE farmer_id = ?`;
 
   dbConn.query(
     updateQuery,
@@ -716,7 +716,7 @@ app.post("/update-password", (req, res) => {
 
   // Get current password hash
   dbConn.query(
-    `SELECT password FROM Farmers WHERE farmer_id = ${farmerId}`,
+    `SELECT password FROM farmers WHERE farmer_id = ${farmerId}`,
     (err, result) => {
       if (err) {
         console.log(err);
@@ -749,7 +749,7 @@ app.post("/update-password", (req, res) => {
 
           // Update password
           dbConn.query(
-            `UPDATE Farmers SET password = ? WHERE farmer_id = ?`,
+            `UPDATE farmers SET password = ? WHERE farmer_id = ?`,
             [newHash, farmerId],
             (err, result) => {
               if (err) {
@@ -780,22 +780,22 @@ app.get("/milk-production", (req, res) => {
   const queries = [
     // Total production count
     `SELECT COUNT(*) as total_production_records 
-     FROM MilkProduction mp 
-     JOIN Animal a ON mp.animal_id = a.animal_tag 
+     FROM milkproduction mp 
+     JOIN animal a ON mp.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId}`,
 
     // Total milk production (last 30 days)
     `SELECT SUM(mp.quantity) as total_milk_production 
-     FROM MilkProduction mp 
-     JOIN Animal a ON mp.animal_id = a.animal_tag 
+     FROM milkproduction mp 
+     JOIN animal a ON mp.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)`,
 
     // Average daily production
     `SELECT AVG(daily_total) as avg_daily_production FROM (
       SELECT DATE(mp.production_date) as production_date, SUM(mp.quantity) as daily_total 
-      FROM MilkProduction mp 
-      JOIN Animal a ON mp.animal_id = a.animal_tag 
+      FROM milkproduction mp 
+      JOIN animal a ON mp.animal_id = a.animal_tag 
       WHERE a.owner_id = ${farmerId} 
       AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
       GROUP BY DATE(mp.production_date)
@@ -803,8 +803,8 @@ app.get("/milk-production", (req, res) => {
 
     // Best performing animal (last 30 days)
     `SELECT a.name as animal_name, a.animal_tag, SUM(mp.quantity) as total_production
-     FROM MilkProduction mp 
-     JOIN Animal a ON mp.animal_id = a.animal_tag 
+     FROM milkproduction mp 
+     JOIN animal a ON mp.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
      GROUP BY a.animal_tag, a.name
@@ -813,21 +813,21 @@ app.get("/milk-production", (req, res) => {
 
     // Recent milk production (last 20)
     `SELECT mp.*, a.name as animal_name, a.animal_tag
-     FROM MilkProduction mp 
-     JOIN Animal a ON mp.animal_id = a.animal_tag 
+     FROM milkproduction mp 
+     JOIN animal a ON mp.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      ORDER BY mp.production_date DESC, mp.production_time DESC 
      LIMIT 20`,
 
     // Animals for dropdown
-    `SELECT animal_tag, name FROM Animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
+    `SELECT animal_tag, name FROM animal WHERE owner_id = ${farmerId} AND status = 'Alive' ORDER BY name`,
 
     // Production by animal (for charts)
     `SELECT a.name as animal_name, a.animal_tag, 
             DATE(mp.production_date) as production_date,
             SUM(mp.quantity) as daily_production
-     FROM MilkProduction mp 
-     JOIN Animal a ON mp.animal_id = a.animal_tag 
+     FROM milkproduction mp 
+     JOIN animal a ON mp.animal_id = a.animal_tag 
      WHERE a.owner_id = ${farmerId} 
      AND mp.production_date >= DATE_SUB(CURDATE(), INTERVAL 15 DAY)
      GROUP BY a.animal_tag, a.name, DATE(mp.production_date)
@@ -933,7 +933,7 @@ app.post("/add-milk-production", (req, res) => {
   }
 
   // Insert milk production into database
-  const insertProductionQuery = `INSERT INTO MilkProduction (animal_id, production_date, production_time, quantity, quality, unit) VALUES (?, ?, ?, ?, ?, 'Liters')`;
+  const insertProductionQuery = `INSERT INTO milkproduction (animal_id, production_date, production_time, quantity, quality, unit) VALUES (?, ?, ?, ?, ?, 'Liters')`;
 
   dbConn.query(
     insertProductionQuery,
@@ -1020,7 +1020,7 @@ app.get("/expenses", (req, res) => {
 
   // Get total expenses for the farmer
   dbConn.query(
-    `SELECT SUM(amount) as total_expenses FROM Expenses WHERE farmer_id = ${req.session.farmer.farmer_id}`,
+    `SELECT SUM(amount) as total_expenses FROM expenses WHERE farmer_id = ${req.session.farmer.farmer_id}`,
     (err, totalResult) => {
       if (err) return res.status(500).send("Server Error!" + err);
 
@@ -1028,7 +1028,7 @@ app.get("/expenses", (req, res) => {
       dbConn.query(
         `SELECT AVG(daily_total) as avg_daily FROM (
           SELECT DATE(expense_date) as expense_date, SUM(amount) as daily_total 
-          FROM Expenses 
+          FROM expenses 
           WHERE farmer_id = ${req.session.farmer.farmer_id} 
           AND expense_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
           GROUP BY DATE(expense_date)
@@ -1038,7 +1038,7 @@ app.get("/expenses", (req, res) => {
 
           // Get last 15 expenses
           dbConn.query(
-            `SELECT * FROM Expenses 
+            `SELECT * FROM expenses 
              WHERE farmer_id = ${req.session.farmer.farmer_id} 
              ORDER BY expense_date DESC, expense_id DESC 
              LIMIT 15`,
@@ -1194,7 +1194,7 @@ app.post("/add-expense", (req, res) => {
   }
 
   // Insert expense into database
-  const insertExpenseQuery = `INSERT INTO Expenses (expense_date, expense_type, description, amount, farmer_id) VALUES (?, ?, ?, ?, ?)`;
+  const insertExpenseQuery = `INSERT INTO expenses (expense_date, expense_type, description, amount, farmer_id) VALUES (?, ?, ?, ?, ?)`;
 
   dbConn.query(
     insertExpenseQuery,

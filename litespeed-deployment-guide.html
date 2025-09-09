@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dairyman LiteSpeed Deployment Guide</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 20px;
+        background: linear-gradient(135deg, #2c6e49, #4c956c);
+        color: white;
+        border-radius: 10px;
+      }
+      .section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        background: #fafafa;
+      }
+      .section h2 {
+        color: #2c6e49;
+        margin-top: 0;
+        border-bottom: 2px solid #2c6e49;
+        padding-bottom: 10px;
+      }
+      .section h3 {
+        color: #4c956c;
+        margin-top: 20px;
+      }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        padding: 15px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        margin: 15px 0;
+        overflow-x: auto;
+        white-space: pre-wrap;
+      }
+      .warning {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        border-left: 4px solid #f39c12;
+      }
+      .success {
+        background: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        border-left: 4px solid #28a745;
+      }
+      .info {
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 15px 0;
+        border-left: 4px solid #17a2b8;
+      }
+      .step {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .step h4 {
+        color: #2c6e49;
+        margin-top: 0;
+      }
+      .domain-highlight {
+        background: #e8f5e8;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+        color: #2c6e49;
+      }
+      ul,
+      ol {
+        padding-left: 20px;
+      }
+      li {
+        margin-bottom: 8px;
+      }
+      .command {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-family: "Courier New", monospace;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🚀 Dairyman LiteSpeed Deployment Guide</h1>
+        <p>
+          Complete deployment guide for
+          <span class="domain-highlight">dairy.agriwel.co.ke</span>
+        </p>
+      </div>
+
+      <!-- Overview -->
+      <div class="section">
+        <h2>📋 Deployment Overview</h2>
+        <p>
+          This guide covers deploying your Dairyman Node.js application on a
+          LiteSpeed server for the domain
+          <span class="domain-highlight">dairy.agriwel.co.ke</span>.
+        </p>
+
+        <div class="info">
+          <h4>🎯 What This Guide Covers:</h4>
+          <ul>
+            <li>LiteSpeed server configuration for Node.js</li>
+            <li>Domain-specific .htaccess setup</li>
+            <li>SSL/HTTPS configuration</li>
+            <li>Database setup and connection</li>
+            <li>Process management with PM2</li>
+            <li>Security configurations</li>
+            <li>Troubleshooting common issues</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Prerequisites -->
+      <div class="section">
+        <h2>🔧 Prerequisites</h2>
+
+        <div class="step">
+          <h4>1. Server Requirements</h4>
+          <ul>
+            <li>LiteSpeed Web Server (Enterprise or OpenLiteSpeed)</li>
+            <li>Node.js 18+ installed</li>
+            <li>MySQL 8.0+ running</li>
+            <li>PM2 for process management</li>
+            <li>SSL certificate for HTTPS</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <h4>2. Domain Configuration</h4>
+          <ul>
+            <li>
+              Domain
+              <span class="domain-highlight">dairy.agriwel.co.ke</span> pointing
+              to your server
+            </li>
+            <li>DNS A record configured</li>
+            <li>SSL certificate installed (Let's Encrypt recommended)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- LiteSpeed Configuration -->
+      <div class="section">
+        <h2>⚙️ LiteSpeed Server Configuration</h2>
+
+        <div class="step">
+          <h4>1. Enable Node.js Support</h4>
+          <p>In LiteSpeed Web Admin Console:</p>
+          <div class="code-block">
+            1. Go to Server Configuration → Script Handler 2. Add new script
+            handler: - Suffix: .js - Type: Node.js - Command:
+            $VH_ROOT/apps/node/bin/node $VH_ROOT/apps/dairyman/server.js 3. Set
+            as default for Node.js files
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>2. Virtual Host Configuration</h4>
+          <p>
+            Create virtual host for
+            <span class="domain-highlight">dairy.agriwel.co.ke</span>:
+          </p>
+          <div class="code-block">
+            Document Root: /home/agriwel/public_html/dairy Index Files:
+            index.html, index.js Script Handler: Node.js Enable Rewrite: Yes
+            Enable GZIP: Yes Enable Cache: Yes
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>3. SSL Configuration</h4>
+          <div class="code-block">
+            SSL Certificate: /path/to/ssl/certificate.crt SSL Private Key:
+            /path/to/ssl/private.key SSL Certificate Chain:
+            /path/to/ssl/chain.crt Force HTTPS: Yes HTTP/2: Enabled
+          </div>
+        </div>
+      </div>
+
+      <!-- File Upload -->
+      <div class="section">
+        <h2>📁 File Upload and Setup</h2>
+
+        <div class="step">
+          <h4>1. Upload Application Files</h4>
+          <div class="command">
+            # Upload all files to /home/agriwel/public_html/dairy/ # Ensure
+            proper file permissions: chmod 755 /home/agriwel/public_html/dairy/
+            chmod 644 /home/agriwel/public_html/dairy/.htaccess chmod 644
+            /home/agriwel/public_html/dairy/server.js chmod -R 755
+            /home/agriwel/public_html/dairy/public/ chmod -R 755
+            /home/agriwel/public_html/dairy/views/
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>2. Install Dependencies</h4>
+          <div class="command">
+            cd /home/agriwel/public_html/dairy/ npm install --production
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>3. Environment Configuration</h4>
+          <p>
+            Update <code>server.js</code> with production database settings:
+          </p>
+          <div class="code-block">
+            const dbConn = mysql.createConnection({ host: "localhost", database:
+            "dairyman_prod", user: "dairyman_user", password:
+            "your_secure_password", port: 3306, });
+          </div>
+        </div>
+      </div>
+
+      <!-- Database Setup -->
+      <div class="section">
+        <h2>🗄️ Database Configuration</h2>
+
+        <div class="step">
+          <h4>1. Create Production Database</h4>
+          <div class="command">
+            mysql -u root -p CREATE DATABASE dairyman_prod; CREATE USER
+            'dairyman_user'@'localhost' IDENTIFIED BY 'your_secure_password';
+            GRANT ALL PRIVILEGES ON dairyman_prod.* TO
+            'dairyman_user'@'localhost'; FLUSH PRIVILEGES; EXIT;
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>2. Import Database Schema</h4>
+          <div class="command">
+            mysql -u dairyman_user -p dairyman_prod < db.sql
+          </div>
+        </div>
+
+        <div class="warning">
+          <h4>⚠️ Security Note:</h4>
+          <p>
+            Change the default database password and ensure your MySQL server is
+            properly secured with firewall rules.
+          </p>
+        </div>
+      </div>
+
+      <!-- Process Management -->
+      <div class="section">
+        <h2>🔄 Process Management with PM2</h2>
+
+        <div class="step">
+          <h4>1. Install PM2</h4>
+          <div class="command">npm install -g pm2</div>
+        </div>
+
+        <div class="step">
+          <h4>2. Create PM2 Configuration</h4>
+          <p>Create <code>ecosystem.config.js</code>:</p>
+          <div class="code-block">
+            module.exports = { apps: [{ name: 'dairyman', script: 'server.js',
+            cwd: '/home/agriwel/public_html/dairy', instances: 1, exec_mode:
+            'fork', env: { NODE_ENV: 'production', PORT: 3000 }, error_file:
+            '/home/agriwel/logs/dairyman-error.log', out_file:
+            '/home/agriwel/logs/dairyman-out.log', log_file:
+            '/home/agriwel/logs/dairyman-combined.log', time: true,
+            max_memory_restart: '1G', restart_delay: 4000, max_restarts: 10,
+            min_uptime: '10s' }] };
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>3. Start Application with PM2</h4>
+          <div class="command">
+            cd /home/agriwel/public_html/dairy/ pm2 start ecosystem.config.js
+            pm2 save pm2 startup
+          </div>
+        </div>
+      </div>
+
+      <!-- .htaccess Configuration -->
+      <div class="section">
+        <h2>📝 .htaccess Configuration</h2>
+
+        <div class="success">
+          <h4>✅ Already Configured</h4>
+          <p>
+            The <code>.htaccess</code> file has been pre-configured for
+            <span class="domain-highlight">dairy.agriwel.co.ke</span> with:
+          </p>
+          <ul>
+            <li>HTTPS redirection</li>
+            <li>www to non-www redirection</li>
+            <li>Node.js routing</li>
+            <li>Static file optimization</li>
+            <li>Security headers</li>
+            <li>Compression and caching</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <h4>Key .htaccess Features for Your Domain:</h4>
+          <div class="code-block">
+            # Force HTTPS RewriteCond %{HTTPS} off RewriteRule ^(.*)$
+            https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301] # Redirect www to
+            non-www RewriteCond %{HTTP_HOST} ^www\.dairy\.agriwel\.co\.ke$ [NC]
+            RewriteRule ^(.*)$ https://dairy.agriwel.co.ke/$1 [R=301,L] # Route
+            to Node.js application RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d RewriteRule ^(.*)$
+            http://localhost:3000/$1 [P,L]
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Configuration -->
+      <div class="section">
+        <h2>🔒 Security Configuration</h2>
+
+        <div class="step">
+          <h4>1. Update Session Secret</h4>
+          <p>In <code>server.js</code>, change the session secret:</p>
+          <div class="code-block">
+            session({ secret: "your-very-long-random-secret-key-here", resave:
+            false, saveUninitialized: true, cookie: { secure: true, // Only send
+            over HTTPS httpOnly: true, maxAge: 24 * 60 * 60 * 1000 // 24 hours }
+            })
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>2. Firewall Configuration</h4>
+          <div class="command">
+            # Allow HTTP and HTTPS ufw allow 80/tcp ufw allow 443/tcp # Allow
+            MySQL (if needed from external) ufw allow 3306/tcp # Block direct
+            access to Node.js port ufw deny 3000/tcp
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>3. File Permissions</h4>
+          <div class="command">
+            # Secure file permissions chmod 600
+            /home/agriwel/public_html/dairy/server.js chmod 600
+            /home/agriwel/public_html/dairy/package.json chmod 644
+            /home/agriwel/public_html/dairy/.htaccess chmod -R 755
+            /home/agriwel/public_html/dairy/public/ chmod -R 755
+            /home/agriwel/public_html/dairy/views/
+          </div>
+        </div>
+      </div>
+
+      <!-- Testing -->
+      <div class="section">
+        <h2>🧪 Testing and Verification</h2>
+
+        <div class="step">
+          <h4>1. Test Application Routes</h4>
+          <ul>
+            <li>
+              <a href="https://dairy.agriwel.co.ke" target="_blank"
+                >https://dairy.agriwel.co.ke</a
+              >
+              - Landing page
+            </li>
+            <li>
+              <a href="https://dairy.agriwel.co.ke/login" target="_blank"
+                >https://dairy.agriwel.co.ke/login</a
+              >
+              - Login page
+            </li>
+            <li>
+              <a href="https://dairy.agriwel.co.ke/register" target="_blank"
+                >https://dairy.agriwel.co.ke/register</a
+              >
+              - Registration
+            </li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <h4>2. Check PM2 Status</h4>
+          <div class="command">pm2 status pm2 logs dairyman</div>
+        </div>
+
+        <div class="step">
+          <h4>3. Verify SSL Certificate</h4>
+          <p>
+            Check that your SSL certificate is valid and properly configured.
+          </p>
+        </div>
+      </div>
+
+      <!-- Monitoring -->
+      <div class="section">
+        <h2>📊 Monitoring and Maintenance</h2>
+
+        <div class="step">
+          <h4>1. PM2 Monitoring Commands</h4>
+          <div class="code-block">
+            pm2 status # Check application status pm2 logs dairyman # View
+            application logs pm2 restart dairyman # Restart application pm2 stop
+            dairyman # Stop application pm2 delete dairyman # Remove from PM2
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>2. Log Rotation</h4>
+          <p>
+            Set up log rotation to prevent log files from growing too large:
+          </p>
+          <div class="command">
+            # Install logrotate sudo apt-get install logrotate # Create
+            logrotate configuration sudo nano /etc/logrotate.d/dairyman
+          </div>
+          <div class="code-block">
+            /home/agriwel/logs/*.log { daily missingok rotate 30 compress
+            delaycompress notifempty create 644 agriwel agriwel postrotate pm2
+            reloadLogs endscript }
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>3. Database Backup</h4>
+          <div class="command">
+            # Create backup script #!/bin/bash DATE=$(date +%Y%m%d_%H%M%S)
+            mysqldump -u dairyman_user -p dairyman_prod >
+            /home/agriwel/backups/dairyman_$DATE.sql gzip
+            /home/agriwel/backups/dairyman_$DATE.sql
+          </div>
+        </div>
+      </div>
+
+      <!-- Troubleshooting -->
+      <div class="section">
+        <h2>🔧 Troubleshooting</h2>
+
+        <div class="step">
+          <h4>Common Issues and Solutions</h4>
+
+          <h5>Issue: Application not starting</h5>
+          <div class="code-block">
+            # Check PM2 logs pm2 logs dairyman # Check if port 3000 is in use
+            netstat -tulpn | grep :3000 # Restart PM2 pm2 restart dairyman
+          </div>
+
+          <h5>Issue: Database connection errors</h5>
+          <div class="code-block">
+            # Test database connection mysql -u dairyman_user -p dairyman_prod #
+            Check MySQL service systemctl status mysql # Restart MySQL systemctl
+            restart mysql
+          </div>
+
+          <h5>Issue: SSL/HTTPS problems</h5>
+          <div class="code-block">
+            # Check SSL certificate openssl x509 -in /path/to/certificate.crt
+            -text -noout # Test SSL configuration curl -I
+            https://dairy.agriwel.co.ke
+          </div>
+
+          <h5>Issue: Static files not loading</h5>
+          <div class="code-block">
+            # Check file permissions ls -la
+            /home/agriwel/public_html/dairy/public/ # Check .htaccess syntax
+            apache2ctl configtest
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Optimization -->
+      <div class="section">
+        <h2>⚡ Performance Optimization</h2>
+
+        <div class="step">
+          <h4>1. LiteSpeed Cache Configuration</h4>
+          <p>Enable LiteSpeed Cache for better performance:</p>
+          <div class="code-block">
+            # In LiteSpeed Web Admin Cache Root: /tmp/lscache/ Cache Enable: Yes
+            Cache Max Expire: 300 Cache Default Expire: 60
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>2. Database Optimization</h4>
+          <div class="command">
+            # Add indexes for better performance mysql -u dairyman_user -p
+            dairyman_prod # Add indexes for frequently queried columns ALTER
+            TABLE MilkProduction ADD INDEX idx_animal_date (animal_id,
+            production_date); ALTER TABLE Animal ADD INDEX idx_owner_status
+            (owner_id, status); ALTER TABLE Expenses ADD INDEX idx_farmer_date
+            (farmer_id, date);
+          </div>
+        </div>
+
+        <div class="step">
+          <h4>3. Node.js Performance</h4>
+          <div class="code-block">
+            # In server.js, add compression const compression =
+            require('compression'); app.use(compression()); # Add helmet for
+            security headers const helmet = require('helmet');
+            app.use(helmet());
+          </div>
+        </div>
+      </div>
+
+      <!-- Final Checklist -->
+      <div class="section">
+        <h2>✅ Deployment Checklist</h2>
+
+        <div class="step">
+          <h4>Pre-Deployment Checklist</h4>
+          <ul>
+            <li>✅ LiteSpeed server configured for Node.js</li>
+            <li>✅ Domain DNS pointing to server</li>
+            <li>✅ SSL certificate installed</li>
+            <li>✅ Database created and configured</li>
+            <li>✅ Application files uploaded</li>
+            <li>✅ Dependencies installed</li>
+            <li>✅ PM2 configuration created</li>
+            <li>✅ .htaccess file configured</li>
+            <li>✅ Security settings applied</li>
+            <li>✅ File permissions set correctly</li>
+          </ul>
+        </div>
+
+        <div class="step">
+          <h4>Post-Deployment Checklist</h4>
+          <ul>
+            <li>✅ Application starts successfully</li>
+            <li>✅ HTTPS redirects working</li>
+            <li>✅ All routes accessible</li>
+            <li>✅ Database connections working</li>
+            <li>✅ Static files loading</li>
+            <li>✅ PM2 monitoring active</li>
+            <li>✅ Logs being generated</li>
+            <li>✅ Backup procedures in place</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Support -->
+      <div class="section">
+        <h2>🆘 Support and Maintenance</h2>
+
+        <div class="info">
+          <h4>📞 Getting Help</h4>
+          <ul>
+            <li>Check PM2 logs: <code>pm2 logs dairyman</code></li>
+            <li>
+              Monitor server resources: <code>htop</code> or <code>top</code>
+            </li>
+            <li>Check LiteSpeed error logs in Web Admin</li>
+            <li>Verify database connectivity</li>
+            <li>Test SSL certificate validity</li>
+          </ul>
+        </div>
+
+        <div class="success">
+          <h4>🎉 Congratulations!</h4>
+          <p>
+            Your Dairyman application should now be successfully deployed on
+            <span class="domain-highlight">dairy.agriwel.co.ke</span> with
+            LiteSpeed server!
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

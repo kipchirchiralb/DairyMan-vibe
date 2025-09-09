@@ -1,0 +1,250 @@
+# Dairyman Node.js Application - LiteSpeed Server Configuration
+# This .htaccess file is optimized for LiteSpeed Web Server
+
+# ===========================================
+# SECURITY CONFIGURATIONS
+# ===========================================
+
+# Prevent access to sensitive files
+<Files ~ "^\.">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Block access to package.json, server.js, and other Node.js files
+<FilesMatch "\.(json|js|sql|md|txt)$">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</FilesMatch>
+
+# Allow access to public assets
+<FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
+    <RequireAll>
+        Require all granted
+    </RequireAll>
+</FilesMatch>
+
+# Block access to node_modules
+RedirectMatch 404 /node_modules/.*
+
+# Block access to .env files
+<FilesMatch "\.env">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</FilesMatch>
+
+# ===========================================
+# PERFORMANCE OPTIMIZATIONS
+# ===========================================
+
+# Enable compression for better performance
+<IfModule mod_deflate.c>
+    # Compress HTML, CSS, JavaScript, Text, XML and fonts
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-otf
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+# Browser Caching for static assets
+<IfModule mod_expires.c>
+    ExpiresActive on
+    
+    # Images
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # CSS and JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    
+    # Fonts
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+    ExpiresByType font/opentype "access plus 1 year"
+    
+    # HTML (shorter cache for dynamic content)
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# Cache-Control headers
+<IfModule mod_headers.c>
+    # Cache static assets
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+    
+    # No cache for HTML files
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires 0
+    </FilesMatch>
+    
+    # Security headers
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ===========================================
+# URL REWRITING FOR NODE.JS APPLICATION
+# ===========================================
+
+# Enable URL rewriting
+RewriteEngine On
+
+# Handle Node.js application routing for dairy.agriwel.co.ke
+# Configured for LiteSpeed server with Node.js support
+
+# Main application routing - all requests go to Node.js app
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+
+# ===========================================
+# STATIC FILE HANDLING
+# ===========================================
+
+# Serve static files directly (CSS, JS, images, etc.)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [L]
+
+# ===========================================
+# ERROR PAGES
+# ===========================================
+
+# Custom error pages (optional - your Node.js app handles these)
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
+
+# ===========================================
+# LITESPEED SPECIFIC OPTIMIZATIONS
+# ===========================================
+
+# Enable LiteSpeed Cache (if available)
+<IfModule LiteSpeed>
+    # Cache static files
+    CacheLookup on
+    CacheRoot /tmp/lscache/
+    
+    # Cache dynamic content for a short time
+    CacheEnable on
+    CacheMaxExpire 300
+    CacheDefaultExpire 60
+</IfModule>
+
+# ===========================================
+# MIME TYPES
+# ===========================================
+
+# Ensure proper MIME types
+AddType application/javascript .js
+AddType text/css .css
+AddType image/svg+xml .svg
+AddType application/font-woff .woff
+AddType application/font-woff2 .woff2
+
+# ===========================================
+# REDIRECTS AND ALIASES
+# ===========================================
+
+# Redirect www to non-www for dairy.agriwel.co.ke
+RewriteCond %{HTTP_HOST} ^www\.dairy\.agriwel\.co\.ke$ [NC]
+RewriteRule ^(.*)$ https://dairy.agriwel.co.ke/$1 [R=301,L]
+
+# Force HTTPS for dairy.agriwel.co.ke
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ===========================================
+# RATE LIMITING (if mod_evasive is available)
+# ===========================================
+
+# Uncomment if you have mod_evasive installed
+# <IfModule mod_evasive24.c>
+#     DOSHashTableSize    2048
+#     DOSPageCount        20
+#     DOSSiteCount        50
+#     DOSPageInterval     1
+#     DOSSiteInterval     1
+#     DOSBlockingPeriod   600
+# </IfModule>
+
+# ===========================================
+# ADDITIONAL SECURITY MEASURES
+# ===========================================
+
+# Prevent access to backup files
+<FilesMatch "\.(bak|backup|old|orig|save|swp|tmp)$">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</FilesMatch>
+
+# Block suspicious user agents (optional)
+# RewriteCond %{HTTP_USER_AGENT} (libwww-perl|wget|python|nikto|curl|scan|java|winhttp|clshttp|loader) [NC,OR]
+# RewriteCond %{HTTP_USER_AGENT} (%0A|%0D|%27|%3C|%3E|%00) [NC,OR]
+# RewriteCond %{HTTP_USER_AGENT} (;|<|>|'|"|\)|\(|%0A|%0D|%22|%27|%28|%3C|%3E|%00).*(libwww-perl|wget|python|nikto|curl|scan|java|winhttp|HTTrack|clshttp|archiver|loader|email|harvest|extract|grab|miner) [NC,OR]
+# RewriteCond %{THE_REQUEST} \?\ HTTP/ [NC,OR]
+# RewriteCond %{THE_REQUEST} \/\*\ HTTP/ [NC,OR]
+# RewriteCond %{THE_REQUEST} etc/passwd [NC,OR]
+# RewriteCond %{THE_REQUEST} cgi-bin [NC,OR]
+# RewriteCond %{THE_REQUEST} (%0A|%0D) [NC]
+# RewriteRule .* - [F]
+
+# ===========================================
+# NODE.JS APPLICATION SPECIFIC
+# ===========================================
+
+# Ensure proper handling of Node.js routes
+# This section ensures that all routes are properly handled by your Node.js application
+
+# Handle specific routes for dairy.agriwel.co.ke
+# API routes
+RewriteRule ^api/(.*)$ http://localhost:3000/api/$1 [P,L]
+
+# Dashboard and protected routes
+RewriteRule ^(dashboard|expenses|animal-profiles|vaccination|medication|feed-consumption|farmer-profile|settings|milk-production)(.*)$ http://localhost:3000/$1$2 [P,L]
+
+# Authentication routes
+RewriteRule ^(login|register|logout)(.*)$ http://localhost:3000/$1$2 [P,L]
+
+# Form submission routes
+RewriteRule ^(new-animal|update-animal-status|add-expense|add-vaccination|add-medication|add-feed-consumption|update-farmer-profile|update-password|add-milk-production)(.*)$ http://localhost:3000/$1$2 [P,L]
+
+# Root and all other routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]

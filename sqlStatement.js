@@ -1,19 +1,19 @@
 function getProductionRecordsForFarmer(farmer_id) {
   return `
   SELECT 
-    Animal.animal_tag,
-    Animal.name as animal_name,
-    MilkProduction.production_date,
-    SUM(MilkProduction.quantity) as total_daily_production,
+    animal.animal_tag,
+    animal.name as animal_name,
+    milkproduction.production_date,
+    SUM(milkproduction.quantity) as total_daily_production,
     COUNT(*) as milking_sessions,
-    Farmers.farm_name,
-    MilkProduction.unit
-FROM MilkProduction 
-JOIN Animal ON MilkProduction.animal_id = Animal.animal_tag
-JOIN Farmers ON Animal.owner_id = Farmers.farmer_id
-WHERE Farmers.farmer_id = ${farmer_id}
-GROUP BY Animal.animal_tag, Animal.name, MilkProduction.production_date, Farmers.farm_name, MilkProduction.unit
-ORDER BY MilkProduction.production_date DESC, total_daily_production DESC;`;
+    farmers.farm_name,
+    milkproduction.unit
+FROM milkproduction 
+JOIN animal ON milkproduction.animal_id = animal.animal_tag
+JOIN farmers ON animal.owner_id = farmers.farmer_id
+WHERE farmers.farmer_id = ${farmer_id}
+GROUP BY animal.animal_tag, animal.name, milkproduction.production_date, farmers.farm_name, milkproduction.unit
+ORDER BY milkproduction.production_date DESC, total_daily_production DESC;`;
 }
 
 function getAnimalsProductionsForFarmer(farmer_id) {
@@ -24,9 +24,9 @@ function getAnimalsProductionsForFarmer(farmer_id) {
     a.name AS animal_name,
     SUM(mp.quantity) AS total_production,
     mp.unit
-FROM Farmers f
-JOIN Animal a ON f.farmer_id = a.owner_id
-JOIN MilkProduction mp ON a.animal_tag = mp.animal_id
+FROM farmers f
+JOIN animal a ON f.farmer_id = a.owner_id
+JOIN milkproduction mp ON a.animal_tag = mp.animal_id
 WHERE f.farmer_id = ${farmer_id}
 GROUP BY f.farm_name, f.fullname, a.animal_tag, a.name, mp.unit
 `;
