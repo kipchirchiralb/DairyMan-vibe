@@ -842,6 +842,45 @@ textarea:focus {
   background-color: rgba(21, 87, 36, 0.1);
 }
 
+/* Error message styles */
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #f5c6cb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-message p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.close-error {
+  background: none;
+  border: none;
+  color: #721c24;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.close-error:hover {
+  background-color: rgba(114, 28, 36, 0.1);
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;

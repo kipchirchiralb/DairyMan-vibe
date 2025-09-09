@@ -18,6 +18,11 @@
           <p><%= locals.successMessage %></p>
           <button class="close-success">×</button>
         </div>
+        <% } %> <% if (locals.errorMessage) { %>
+        <div class="error-message">
+          <p><%= locals.errorMessage %></p>
+          <button class="close-error">×</button>
+        </div>
         <% } %>
 
         <div class="section-header">
@@ -75,7 +80,7 @@
           <% allAnimalsForFarmer.forEach(animal=>{ %>
 
           <div class="animal-card">
-            <h3><%= animal.name %> (<%= animal.animal_tag %>)</h3>
+            <h3><%= animal.name %> (<%= animal.display_tag %>)</h3>
             <p><strong>Breed:</strong> <%= animal.breed %></p>
             <p>
               <strong>Age:</strong> <%= new Date().getFullYear() - new
@@ -92,7 +97,7 @@
             <div class="animal-actions">
               <button
                 class="btn btn-small update-status-btn"
-                data-animal-id="<%= animal.animal_tag %>"
+                data-animal-id="<%= animal.full_tag %>"
                 data-current-status="<%= animal.status %>"
               >
                 Update Status
@@ -362,6 +367,14 @@
       if (closeSuccessBtn) {
         closeSuccessBtn.addEventListener("click", function () {
           this.closest(".success-message").style.display = "none";
+        });
+      }
+
+      // Close error message
+      const closeErrorBtn = document.querySelector(".close-error");
+      if (closeErrorBtn) {
+        closeErrorBtn.addEventListener("click", function () {
+          this.closest(".error-message").style.display = "none";
         });
       }
     </script>

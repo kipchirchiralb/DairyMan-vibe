@@ -874,13 +874,39 @@ app.get("/milk-production", (req, res) => {
         );
       });
 
+      // Process animals to show original tag names (without farmer ID prefix)
+      const processedAnimals = (animalsResult || []).map((animal) => {
+        const originalTag = animal.animal_tag.includes("_")
+          ? animal.animal_tag.split("_").slice(1).join("_")
+          : animal.animal_tag;
+        return {
+          ...animal,
+          display_tag: originalTag,
+          full_tag: animal.animal_tag,
+        };
+      });
+
+      // Process recent production to show display tags
+      const processedRecentProduction = (recentResult || []).map(
+        (production) => {
+          const originalTag = production.animal_tag.includes("_")
+            ? production.animal_tag.split("_").slice(1).join("_")
+            : production.animal_tag;
+          return {
+            ...production,
+            display_tag: originalTag,
+            full_tag: production.animal_tag,
+          };
+        }
+      );
+
       res.render("milk-production.ejs", {
         totalProductionRecords: totalResult[0].total_production_records || 0,
         totalMilkProduction: productionResult[0].total_milk_production || 0,
         avgDailyProduction: avgResult[0].avg_daily_production || 0,
         bestAnimal: bestAnimalResult[0] || null,
-        recentProduction: recentResult || [],
-        animals: animalsResult || [],
+        recentProduction: processedRecentProduction,
+        animals: processedAnimals,
         chartData: chartData,
         successMessage,
       });
@@ -931,10 +957,24 @@ app.post("/add-milk-production", (req, res) => {
 
 app.get("/animal-profiles", (req, res) => {
   const message = req.query.message;
+  const error = req.query.error;
+  const errorMsg = req.query.message;
+
   let successMessage = null;
+  let errorMessage = null;
 
   if (message === "status_updated") {
     successMessage = "Animal status updated successfully!";
+  } else if (message === "animal_added") {
+    successMessage = "Animal added successfully!";
+  }
+
+  if (error === "duplicate_entry") {
+    errorMessage = decodeURIComponent(errorMsg || "Duplicate entry detected.");
+  } else if (error === "validation_error") {
+    errorMessage = decodeURIComponent(errorMsg || "Validation error occurred.");
+  } else if (error === "database_error") {
+    errorMessage = decodeURIComponent(errorMsg || "Database error occurred.");
   }
 
   dbConn.query(
@@ -946,10 +986,23 @@ app.get("/animal-profiles", (req, res) => {
       dbConn.query(
         `select * from animal WHERE owner_id=${req.session.farmer.farmer_id}`,
         (err, allAnimalsForFarmer) => {
+          // Process animals to show original tag names (without farmer ID prefix)
+          const processedAnimals = allAnimalsForFarmer.map((animal) => {
+            const originalTag = animal.animal_tag.includes("_")
+              ? animal.animal_tag.split("_").slice(1).join("_")
+              : animal.animal_tag;
+            return {
+              ...animal,
+              display_tag: originalTag,
+              full_tag: animal.animal_tag,
+            };
+          });
+
           res.render("animal-profiles.ejs", {
             animals: utils.getChartData(animals),
-            allAnimalsForFarmer,
+            allAnimalsForFarmer: processedAnimals,
             successMessage,
+            errorMessage,
           });
         }
       );
@@ -1009,19 +1062,59 @@ app.get("/expenses", (req, res) => {
 app.post("/new-animal", (req, res) => {
   let { animal_tag, dob, purchase_date, breed, name, source, gender, status } =
     req.body;
+
+  // Validate required fields
+  if (!animal_tag || !name || !breed || !gender || !status) {
+    return res.redirect(
+      "/animal-profiles?error=validation_error&message=" +
+        encodeURIComponent(
+          "Missing required fields. Please fill in all required information."
+        )
+    );
+  }
+
+  // Validate animal tag format
+  if (animal_tag.length < 2) {
+    return res.redirect(
+      "/animal-profiles?error=validation_error&message=" +
+        encodeURIComponent("Animal tag must be at least 2 characters long.")
+    );
+  }
+
+  // Auto-prefix farmer ID to animal tag to prevent conflicts
+  const farmerId = req.session.farmer.farmer_id;
+  const prefixedAnimalTag = `${farmerId}_${animal_tag}`;
+
   purchase_date.length == 0
     ? (purchase_date = "2000-01-01")
     : (purchase_date = purchase_date);
   console.log(req.body);
 
-  const insertAnimalStatement = `INSERT INTO animal(animal_tag,name,dob,purchase_date,breed,status,source,gender,owner_id) VALUES("${animal_tag}","${name}","${dob}","${purchase_date}","${breed}","${status}","${source}","${gender}", ${req.session.farmer.farmer_id})`;
+  const insertAnimalStatement = `INSERT INTO animal(animal_tag,name,dob,purchase_date,breed,status,source,gender,owner_id) VALUES("${prefixedAnimalTag}","${name}","${dob}","${purchase_date}","${breed}","${status}","${source}","${gender}", ${farmerId})`;
 
   dbConn.query(insertAnimalStatement, (sqlErr) => {
     if (sqlErr) {
       console.log(sqlErr);
-      return res.status(500).send("Server Error!" + sqlErr);
+
+      // Handle duplicate entry error specifically
+      if (sqlErr.code === "ER_DUP_ENTRY") {
+        return res.redirect(
+          "/animal-profiles?error=duplicate_entry&message=" +
+            encodeURIComponent(
+              "Animal tag '" +
+                animal_tag +
+                "' already exists. Please use a different tag."
+            )
+        );
+      }
+
+      // Handle other database errors
+      return res.redirect(
+        "/animal-profiles?error=database_error&message=" +
+          encodeURIComponent("Database error occurred. Please try again.")
+      );
     }
-    res.redirect("/animal-profiles");
+    res.redirect("/animal-profiles?message=animal_added");
   });
 });
 
@@ -1126,6 +1219,143 @@ app.post("/add-expense", (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/login");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error occurred:", err);
+
+  // Handle specific error types
+  if (err.code === "ER_DUP_ENTRY") {
+    // Handle duplicate entry errors
+    const field = err.sqlMessage.match(/for key '(.+?)'/);
+    let errorMessage = "Duplicate entry detected. ";
+
+    if (field && field[1]) {
+      const keyName = field[1];
+      if (keyName.includes("animal_tag") || keyName.includes("PRIMARY")) {
+        errorMessage = "Animal tag already exists. Please use a different tag.";
+      } else if (keyName.includes("email")) {
+        errorMessage =
+          "Email address already exists. Please use a different email.";
+      } else {
+        errorMessage = `Duplicate entry for ${keyName}. Please use a different value.`;
+      }
+    }
+
+    // If it's an AJAX request or API call, return JSON
+    if (req.xhr || req.headers.accept?.indexOf("json") > -1) {
+      return res.status(400).json({
+        error: true,
+        message: errorMessage,
+        type: "duplicate_entry",
+      });
+    }
+
+    // For form submissions, redirect with error message
+    const referer = req.get("Referer") || "/dashboard";
+    return res.redirect(
+      `${referer}?error=duplicate_entry&message=${encodeURIComponent(
+        errorMessage
+      )}`
+    );
+  }
+
+  // Handle foreign key constraint errors
+  if (err.code === "ER_NO_REFERENCED_ROW_2") {
+    const errorMessage =
+      "Referenced record does not exist. Please check your data.";
+
+    if (req.xhr || req.headers.accept?.indexOf("json") > -1) {
+      return res.status(400).json({
+        error: true,
+        message: errorMessage,
+        type: "foreign_key_error",
+      });
+    }
+
+    const referer = req.get("Referer") || "/dashboard";
+    return res.redirect(
+      `${referer}?error=foreign_key_error&message=${encodeURIComponent(
+        errorMessage
+      )}`
+    );
+  }
+
+  // Handle validation errors
+  if (err.name === "ValidationError") {
+    const errorMessage = "Validation error: " + err.message;
+
+    if (req.xhr || req.headers.accept?.indexOf("json") > -1) {
+      return res.status(400).json({
+        error: true,
+        message: errorMessage,
+        type: "validation_error",
+      });
+    }
+
+    const referer = req.get("Referer") || "/dashboard";
+    return res.redirect(
+      `${referer}?error=validation_error&message=${encodeURIComponent(
+        errorMessage
+      )}`
+    );
+  }
+
+  // Handle database connection errors
+  if (err.code === "ECONNREFUSED" || err.code === "ER_ACCESS_DENIED_ERROR") {
+    console.error("Database connection error:", err);
+    return res.status(500).render("500.ejs", {
+      error: {
+        message: "Database connection failed. Please try again later.",
+      },
+    });
+  }
+
+  // Handle file upload errors
+  if (err.code === "LIMIT_FILE_SIZE") {
+    const errorMessage = "File too large. Please choose a smaller file.";
+
+    if (req.xhr || req.headers.accept?.indexOf("json") > -1) {
+      return res.status(400).json({
+        error: true,
+        message: errorMessage,
+        type: "file_size_error",
+      });
+    }
+
+    const referer = req.get("Referer") || "/dashboard";
+    return res.redirect(
+      `${referer}?error=file_size_error&message=${encodeURIComponent(
+        errorMessage
+      )}`
+    );
+  }
+
+  // Default error handling
+  const errorMessage =
+    process.env.NODE_ENV === "production"
+      ? "An unexpected error occurred. Please try again."
+      : err.message;
+
+  if (req.xhr || req.headers.accept?.indexOf("json") > -1) {
+    return res.status(500).json({
+      error: true,
+      message: errorMessage,
+      type: "server_error",
+    });
+  }
+
+  res.status(500).render("500.ejs", {
+    error: {
+      message: errorMessage,
+    },
+  });
+});
+
+// 404 handler - must be after all routes
+app.use((req, res) => {
+  res.status(404).render("404.ejs");
 });
 
 app.listen(3000, () => {

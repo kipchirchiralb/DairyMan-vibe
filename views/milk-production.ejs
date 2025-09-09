@@ -138,7 +138,7 @@
                   <td>
                     <span class="animal-badge">
                       🐄 <%= production.animal_name %> (<%=
-                      production.animal_tag %>)
+                      production.display_tag %>)
                     </span>
                   </td>
                   <td class="quantity"><%= production.quantity %>L</td>
@@ -202,8 +202,8 @@
             <select id="animal_id" name="animal_id" required>
               <option value="">Select animal</option>
               <% animals.forEach(animal => { %>
-              <option value="<%= animal.animal_tag %>">
-                <%= animal.name %> (<%= animal.animal_tag %>)
+              <option value="<%= animal.full_tag %>">
+                <%= animal.name %> (<%= animal.display_tag %>)
               </option>
               <% }); %>
             </select>
