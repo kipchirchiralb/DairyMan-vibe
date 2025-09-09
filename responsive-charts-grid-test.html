@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Charts Grid Test - Dairyman Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+      }
+      .test-section h3 {
+        color: #2c6e49;
+        margin-top: 0;
+      }
+      .feature-demo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .demo-card {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .demo-card h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .responsive-demo {
+        display: flex;
+        gap: 20px;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+      .device-demo {
+        flex: 1;
+        min-width: 200px;
+        padding: 15px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+      }
+      .device-demo h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 10px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        overflow-x: auto;
+      }
+      .testing-steps {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .testing-steps h4 {
+        margin-top: 0;
+        color: #856404;
+      }
+      .testing-steps ol {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .testing-steps li {
+        margin-bottom: 8px;
+      }
+      .feature-list {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .feature-list h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .feature-list ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .feature-list li {
+        margin-bottom: 8px;
+      }
+      @media (max-width: 768px) {
+        .feature-demo {
+          grid-template-columns: 1fr;
+        }
+        .test-container {
+          padding: 15px;
+        }
+        .responsive-demo {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>📊 Responsive Charts Grid - Dairyman Dashboard</h1>
+      <p>
+        This page demonstrates the new responsive chart grid layout that
+        displays two animal line graphs per row on large screens.
+      </p>
+
+      <div class="test-section">
+        <h3>🎯 Grid Layout Implementation</h3>
+        <p>
+          The dashboard now features a responsive grid system for displaying
+          animal production charts:
+        </p>
+
+        <div class="responsive-demo">
+          <div class="device-demo">
+            <h4>Mobile (≤768px)</h4>
+            <p>• Single column layout</p>
+            <p>• One chart per row</p>
+            <p>• Optimized for touch</p>
+          </div>
+          <div class="device-demo">
+            <h4>Tablet (769px-1199px)</h4>
+            <p>• Single column layout</p>
+            <p>• One chart per row</p>
+            <p>• Larger chart sizes</p>
+          </div>
+          <div class="device-demo">
+            <h4>Desktop (≥1200px)</h4>
+            <p>• Two columns layout</p>
+            <p>• Two charts per row</p>
+            <p>• Side-by-side display</p>
+          </div>
+          <div class="device-demo">
+            <h4>Large Desktop (≥1400px)</h4>
+            <p>• Two columns layout</p>
+            <p>• Increased spacing</p>
+            <p>• Larger chart heights</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>✨ Key Features Implemented</h3>
+        <div class="feature-list">
+          <h4>Responsive Grid System</h4>
+          <ul>
+            <li>
+              <strong>CSS Grid Layout:</strong> Modern grid system for flexible
+              chart arrangement
+            </li>
+            <li>
+              <strong>Breakpoint Management:</strong> Different layouts for
+              different screen sizes
+            </li>
+            <li>
+              <strong>Automatic Wrapping:</strong> Charts automatically wrap to
+              new rows as needed
+            </li>
+            <li>
+              <strong>Equal Column Widths:</strong> Charts maintain equal width
+              in grid layout
+            </li>
+            <li>
+              <strong>Responsive Gaps:</strong> Spacing adjusts based on screen
+              size
+            </li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>Chart Responsiveness</h4>
+          <ul>
+            <li>
+              <strong>Maintain Aspect Ratio:</strong> Charts maintain proper
+              proportions
+            </li>
+            <li>
+              <strong>Responsive Heights:</strong> Chart heights adjust for
+              different screen sizes
+            </li>
+            <li>
+              <strong>Overflow Protection:</strong> Charts never exceed
+              container width
+            </li>
+            <li>
+              <strong>Touch Optimization:</strong> Larger touch targets on
+              mobile devices
+            </li>
+            <li>
+              <strong>Performance:</strong> Smooth rendering across all devices
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔧 Technical Implementation</h3>
+        <h4>CSS Grid Structure</h4>
+        <div class="code-block">
+          /* Charts grid container */ .charts-grid { display: grid;
+          grid-template-columns: 1fr; gap: 20px; margin: 20px 0; } /* Large
+          screens - 2 charts per row */ @media (min-width: 1200px) {
+          .charts-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; } }
+        </div>
+
+        <h4>HTML Structure</h4>
+        <div class="code-block">
+          &lt;div class="charts-grid"&gt; &lt;% for (const animal in
+          groupedData){ %&gt; &lt;div class="chart-wrapper"&gt; &lt;h2
+          class="chart-title"&gt;Animal Name&lt;/h2&gt; &lt;canvas id="animal"
+          class="animal-chart"&gt;&lt;/canvas&gt; &lt;/div&gt; &lt;% } %&gt;
+          &lt;/div&gt;
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📱 Responsive Breakpoints</h3>
+        <div class="feature-demo">
+          <div class="demo-card">
+            <h4>Mobile (≤768px)</h4>
+            <p>• Single column grid</p>
+            <p>• 20px gap between charts</p>
+            <p>• 300px chart height</p>
+            <p>• Touch-optimized interface</p>
+          </div>
+          <div class="demo-card">
+            <h4>Tablet (769px-1199px)</h4>
+            <p>• Single column grid</p>
+            <p>• 25px gap between charts</p>
+            <p>• 350px chart height</p>
+            <p>• Larger touch targets</p>
+          </div>
+          <div class="demo-card">
+            <h4>Desktop (≥1200px)</h4>
+            <p>• Two column grid</p>
+            <p>• 30px gap between charts</p>
+            <p>• 350px chart height</p>
+            <p>• Side-by-side layout</p>
+          </div>
+          <div class="demo-card">
+            <h4>Large Desktop (≥1400px)</h4>
+            <p>• Two column grid</p>
+            <p>• 40px gap between charts</p>
+            <p>• 400px chart height</p>
+            <p>• Enhanced spacing</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🧪 Testing Instructions</h3>
+        <div class="testing-steps">
+          <h4>Manual Testing Steps</h4>
+          <ol>
+            <li>Start your Node.js server: <code>node server.js</code></li>
+            <li>Open <code>http://localhost:3000</code> in your browser</li>
+            <li>Login and navigate to the dashboard</li>
+            <li>Test different screen sizes by resizing browser window</li>
+            <li>Verify chart layout changes at breakpoints</li>
+            <li>Check that charts don't overflow on any screen size</li>
+            <li>Test on actual mobile and tablet devices</li>
+          </ol>
+        </div>
+
+        <div class="testing-steps">
+          <h4>Test Scenarios</h4>
+          <ol>
+            <li>
+              <strong>Mobile Layout:</strong> Verify single column layout on
+              mobile
+            </li>
+            <li>
+              <strong>Tablet Layout:</strong> Check single column with larger
+              charts
+            </li>
+            <li>
+              <strong>Desktop Layout:</strong> Confirm two charts per row on
+              large screens
+            </li>
+            <li>
+              <strong>Responsive Transitions:</strong> Test smooth transitions
+              between breakpoints
+            </li>
+            <li>
+              <strong>Chart Scaling:</strong> Verify charts scale properly in
+              grid
+            </li>
+            <li>
+              <strong>Overflow Prevention:</strong> Ensure no horizontal
+              scrolling
+            </li>
+            <li>
+              <strong>Performance:</strong> Check smooth rendering on all
+              devices
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🎨 Visual Benefits</h3>
+        <ul>
+          <li>
+            <strong>Better Space Utilization:</strong> More efficient use of
+            screen real estate on large displays
+          </li>
+          <li>
+            <strong>Improved Comparison:</strong> Side-by-side charts make it
+            easier to compare animal performance
+          </li>
+          <li>
+            <strong>Consistent Layout:</strong> Uniform spacing and alignment
+            across all charts
+          </li>
+          <li>
+            <strong>Professional Appearance:</strong> Clean, organized grid
+            layout
+          </li>
+          <li>
+            <strong>Scalable Design:</strong> Layout adapts to any number of
+            animals
+          </li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h3>🔗 Integration Points</h3>
+        <p>This responsive chart grid integrates seamlessly with:</p>
+        <ul>
+          <li>
+            <strong>Mobile Navigation:</strong> Works perfectly with the mobile
+            navigation modal
+          </li>
+          <li>
+            <strong>Animal Status Feature:</strong> Charts update when animal
+            status changes
+          </li>
+          <li>
+            <strong>Responsive Design:</strong> Complements the overall
+            responsive layout
+          </li>
+          <li>
+            <strong>Chart.js Library:</strong> Maintains full Chart.js
+            functionality
+          </li>
+          <li>
+            <strong>Dashboard Layout:</strong> Integrates with existing
+            dashboard structure
+          </li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h3>🚀 Future Enhancements</h3>
+        <p>Potential improvements for future versions:</p>
+        <ul>
+          <li>Three charts per row on ultra-wide screens</li>
+          <li>Interactive chart selection and filtering</li>
+          <li>Chart comparison mode with synchronized axes</li>
+          <li>Export functionality for individual or grouped charts</li>
+          <li>Customizable chart grid layout preferences</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

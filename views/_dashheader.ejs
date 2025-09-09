@@ -1,0 +1,13 @@
+<nav class="top-nav">
+  <div class="nav-left">
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+    <h1>
+      Welcome Mkulima <%= locals.farmer ? locals.farmer.fullname : "Guest" %>
+    </h1>
+  </div>
+  <a href="/logout" class="logout-btn">Logout</a>
+</nav>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expenses Feature Test - Dairyman Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+      }
+      .test-section h3 {
+        color: #2c6e49;
+        margin-top: 0;
+      }
+      .feature-demo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .demo-card {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .demo-card h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .code-block {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 10px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        margin: 10px 0;
+        overflow-x: auto;
+      }
+      .testing-steps {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .testing-steps h4 {
+        margin-top: 0;
+        color: #856404;
+      }
+      .testing-steps ol {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .testing-steps li {
+        margin-bottom: 8px;
+      }
+      .feature-list {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+      }
+      .feature-list h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      .feature-list ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .feature-list li {
+        margin-bottom: 8px;
+      }
+      .expense-types {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+        margin: 15px 0;
+      }
+      .expense-type {
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: 500;
+      }
+      .expense-type-feeds {
+        background-color: #e8f5e8;
+        color: #2c6e49;
+      }
+      .expense-type-vaccination {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      .expense-type-medication {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .expense-type-maintenance {
+        background-color: #d1ecf1;
+        color: #0c5460;
+      }
+      .expense-type-labor {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .expense-type-insemination {
+        background-color: #e2e3e5;
+        color: #383d41;
+      }
+      .expense-type-other {
+        background-color: #f8f9fa;
+        color: #6c757d;
+      }
+      @media (max-width: 768px) {
+        .feature-demo {
+          grid-template-columns: 1fr;
+        }
+        .test-container {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>💰 Expenses Feature - Dairyman Dashboard</h1>
+      <p>
+        This page demonstrates the new expenses management feature that allows
+        farmers to track and manage their farm expenses.
+      </p>
+
+      <div class="test-section">
+        <h3>🎯 Feature Overview</h3>
+        <p>The expenses page provides comprehensive expense tracking with:</p>
+        <div class="feature-demo">
+          <div class="demo-card">
+            <h4>📊 Expense Summary</h4>
+            <p>• Total expenses overview</p>
+            <p>• Average daily expenses (30 days)</p>
+            <p>• Visual stat cards with icons</p>
+          </div>
+          <div class="demo-card">
+            <h4>📋 Recent Expenses Table</h4>
+            <p>• Last 15 expenses displayed</p>
+            <p>• Color-coded expense types</p>
+            <p>• "View All" link for complete history</p>
+          </div>
+          <div class="demo-card">
+            <h4>➕ Add New Expense</h4>
+            <p>• Modal form for recording expenses</p>
+            <p>• All expense types supported</p>
+            <p>• Form validation and error handling</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>✨ Key Features Implemented</h3>
+        <div class="feature-list">
+          <h4>Expense Tracking</h4>
+          <ul>
+            <li>
+              <strong>Total Expenses:</strong> Sum of all expenses for the
+              farmer
+            </li>
+            <li>
+              <strong>Average Daily:</strong> Calculated from last 30 days of
+              expenses
+            </li>
+            <li>
+              <strong>Recent History:</strong> Last 15 expenses with full
+              details
+            </li>
+            <li>
+              <strong>Expense Types:</strong> 7 predefined categories with color
+              coding
+            </li>
+            <li>
+              <strong>Responsive Design:</strong> Works on all device sizes
+            </li>
+          </ul>
+        </div>
+
+        <div class="feature-list">
+          <h4>Expense Recording</h4>
+          <ul>
+            <li>
+              <strong>Modal Form:</strong> Clean, user-friendly expense entry
+            </li>
+            <li><strong>Date Selection:</strong> Defaults to today's date</li>
+            <li>
+              <strong>Type Selection:</strong> Dropdown with all expense types
+            </li>
+            <li>
+              <strong>Description Field:</strong> Optional detailed description
+            </li>
+            <li>
+              <strong>Amount Validation:</strong> Ensures positive numbers only
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🏷️ Supported Expense Types</h3>
+        <div class="expense-types">
+          <div class="expense-type expense-type-feeds">Feeds</div>
+          <div class="expense-type expense-type-vaccination">Vaccination</div>
+          <div class="expense-type expense-type-medication">Medication</div>
+          <div class="expense-type expense-type-maintenance">Maintenance</div>
+          <div class="expense-type expense-type-labor">Labor</div>
+          <div class="expense-type expense-type-insemination">Insemination</div>
+          <div class="expense-type expense-type-other">Other</div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔧 Technical Implementation</h3>
+        <h4>Database Integration</h4>
+        <div class="code-block">
+          -- Expenses table structure CREATE TABLE Expenses ( expense_id INT
+          AUTO_INCREMENT PRIMARY KEY, expense_date DATE NOT NULL, expense_type
+          ENUM('Feeds','Vaccination','Medication','Maintenance','Labor','Insemination','Other')
+          NOT NULL, description VARCHAR(255), amount DECIMAL(12,2) NOT NULL,
+          farmer_id INT, FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id)
+          );
+        </div>
+
+        <h4>Backend Routes</h4>
+        <div class="code-block">
+          // GET /expenses - Display expenses page app.get("/expenses", (req,
+          res) => { // Get total expenses, average daily, and recent expenses //
+          Render expenses.ejs with data }); // POST /add-expense - Add new
+          expense app.post("/add-expense", (req, res) => { // Validate and
+          insert expense into database // Redirect with success message });
+        </div>
+
+        <h4>Frontend Features</h4>
+        <div class="code-block">
+          // Modal functionality - Open/close expense recording modal - Form
+          validation - Success message handling - Responsive design // Data
+          display - Stat cards with totals - Color-coded expense types -
+          Responsive table layout - Mobile-friendly interface
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📱 Responsive Design</h3>
+        <div class="feature-demo">
+          <div class="demo-card">
+            <h4>Desktop (>768px)</h4>
+            <p>• Two-column stat cards layout</p>
+            <p>• Full-width table with all columns</p>
+            <p>• Side-by-side form buttons</p>
+          </div>
+          <div class="demo-card">
+            <h4>Mobile (≤768px)</h4>
+            <p>• Single-column stat cards</p>
+            <p>• Horizontal scrollable table</p>
+            <p>• Stacked form buttons</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🧪 Testing Instructions</h3>
+        <div class="testing-steps">
+          <h4>Manual Testing Steps</h4>
+          <ol>
+            <li>Start your Node.js server: <code>node server.js</code></li>
+            <li>Open <code>http://localhost:3000</code> in your browser</li>
+            <li>Login with existing farmer credentials</li>
+            <li>Navigate to "Expenses" from the dashboard menu</li>
+            <li>Verify expense summary cards display correctly</li>
+            <li>Check that recent expenses table shows data</li>
+            <li>Click "Record New Expense" button</li>
+            <li>Fill out the expense form and submit</li>
+            <li>Verify success message appears</li>
+            <li>Check that new expense appears in the table</li>
+            <li>Test responsive design on different screen sizes</li>
+          </ol>
+        </div>
+
+        <div class="testing-steps">
+          <h4>Test Scenarios</h4>
+          <ol>
+            <li>
+              <strong>Expense Recording:</strong> Test all expense types and
+              validation
+            </li>
+            <li>
+              <strong>Data Display:</strong> Verify totals and averages
+              calculate correctly
+            </li>
+            <li>
+              <strong>Form Validation:</strong> Test required fields and amount
+              validation
+            </li>
+            <li>
+              <strong>Modal Functionality:</strong> Test open/close and form
+              reset
+            </li>
+            <li>
+              <strong>Responsive Layout:</strong> Test on mobile and tablet
+              devices
+            </li>
+            <li>
+              <strong>Navigation:</strong> Verify expenses link works from
+              dashboard
+            </li>
+            <li>
+              <strong>Success Messages:</strong> Test success notification
+              display
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>🔗 Integration Points</h3>
+        <p>This expenses feature integrates seamlessly with:</p>
+        <ul>
+          <li>
+            <strong>Dashboard Navigation:</strong> Accessible from main menu
+          </li>
+          <li>
+            <strong>Mobile Navigation:</strong> Works with mobile menu modal
+          </li>
+          <li>
+            <strong>Authentication:</strong> Protected route requiring login
+          </li>
+          <li>
+            <strong>Database:</strong> Uses existing farmer_id for data
+            isolation
+          </li>
+          <li>
+            <strong>Responsive Design:</strong> Consistent with overall app
+            styling
+          </li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h3>🚀 Future Enhancements</h3>
+        <p>Potential improvements for future versions:</p>
+        <ul>
+          <li>Expense categories and subcategories</li>
+          <li>Expense reports and analytics</li>
+          <li>Budget tracking and alerts</li>
+          <li>Receipt image uploads</li>
+          <li>Expense export functionality</li>
+          <li>Recurring expense templates</li>
+          <li>Expense approval workflows</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

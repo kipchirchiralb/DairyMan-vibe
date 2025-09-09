@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Design Test - Dairyman</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .test-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 2px dashed #ddd;
+        border-radius: 8px;
+      }
+      .test-section h3 {
+        color: #2c6e49;
+        margin-top: 0;
+      }
+      .responsive-demo {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 15px 0;
+      }
+      .demo-card {
+        background: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+      .breakpoint-info {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      .breakpoint-info h4 {
+        margin-top: 0;
+        color: #2c6e49;
+      }
+      @media (max-width: 768px) {
+        .responsive-demo {
+          grid-template-columns: 1fr;
+        }
+        .breakpoint-info {
+          background: #fff3cd;
+        }
+      }
+      @media (max-width: 480px) {
+        .test-container {
+          padding: 15px;
+        }
+        .breakpoint-info {
+          background: #f8d7da;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🐄 Dairyman - Responsive Design Test</h1>
+      <p>
+        This page demonstrates the responsive design improvements made to the
+        Dairyman web application.
+      </p>
+
+      <div class="test-section">
+        <h3>📱 Responsive Grid Demo</h3>
+        <p>This grid adapts to different screen sizes:</p>
+        <div class="responsive-demo">
+          <div class="demo-card">Feature 1</div>
+          <div class="demo-card">Feature 2</div>
+          <div class="demo-card">Feature 3</div>
+          <div class="demo-card">Feature 4</div>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>📏 Breakpoint Information</h3>
+        <div class="breakpoint-info">
+          <h4>Desktop (1200px+)</h4>
+          <p>Full layout with 3-column features grid, full navigation menu</p>
+        </div>
+        <div class="breakpoint-info">
+          <h4>Tablet (769px - 1024px)</h4>
+          <p>2-column features grid, condensed navigation</p>
+        </div>
+        <div class="breakpoint-info">
+          <h4>Mobile (768px and below)</h4>
+          <p>Single column layout, hamburger menu, stacked buttons</p>
+        </div>
+        <div class="breakpoint-info">
+          <h4>Small Mobile (480px and below)</h4>
+          <p>Optimized for small screens with reduced padding and font sizes</p>
+        </div>
+      </div>
+
+      <div class="test-section">
+        <h3>✨ Key Improvements Made</h3>
+        <ul>
+          <li>
+            <strong>Mobile Navigation:</strong> Added hamburger menu for mobile
+            devices
+          </li>
+          <li>
+            <strong>Responsive Grids:</strong> Features, stats, and animal cards
+            adapt to screen size
+          </li>
+          <li>
+            <strong>Touch-Friendly:</strong> Buttons meet minimum 44px touch
+            target size
+          </li>
+          <li>
+            <strong>Flexible Forms:</strong> Login and registration forms adapt
+            to screen width
+          </li>
+          <li>
+            <strong>Dashboard Layout:</strong> Sidebar collapses to top on
+            mobile
+          </li>
+          <li><strong>Charts:</strong> Dashboard charts are now responsive</li>
+          <li>
+            <strong>Typography:</strong> Font sizes scale appropriately for
+            different devices
+          </li>
+          <li>
+            <strong>Spacing:</strong> Padding and margins adjust for optimal
+            mobile experience
+          </li>
+        </ul>
+      </div>
+
+      <div class="test-section">
+        <h3>🧪 Testing Instructions</h3>
+        <ol>
+          <li>Open the main application in your browser</li>
+          <li>Use browser developer tools to test different screen sizes</li>
+          <li>
+            Try the following breakpoints: 320px, 480px, 768px, 1024px, 1200px
+          </li>
+          <li>Test the mobile menu functionality on smaller screens</li>
+          <li>
+            Verify that all forms and buttons are easily tappable on mobile
+          </li>
+          <li>Check that text remains readable at all sizes</li>
+        </ol>
+      </div>
+
+      <div class="test-section">
+        <h3>🔗 Test the Application</h3>
+        <p>To test the responsive design:</p>
+        <ol>
+          <li>Start your Node.js server: <code>node server.js</code></li>
+          <li>Open <code>http://localhost:3000</code> in your browser</li>
+          <li>Use browser dev tools to simulate different devices</li>
+          <li>Test all pages: Home, Login, Register, Dashboard</li>
+        </ol>
+      </div>
+    </div>
+  </body>
+</html>

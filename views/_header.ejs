@@ -1,0 +1,81 @@
+<header>
+  <div class="container">
+    <nav>
+      <div class="logo">Dairyman</div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#features">Features</a></li>
+        <li><a href="/#benefits">Benefits</a></li>
+        <li><a href="/#testimonials">Testimonials</a></li>
+        <li><a href="/#stats">Results</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <a href="/login" class="btn btn-secondary">Login</a>
+        <a href="/register" class="btn">Register</a>
+      </div>
+      <!-- Mobile menu button -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- Mobile Navigation Modal -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay">
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-header">
+      <h3>Navigation</h3>
+      <button class="mobile-nav-close" id="mobileNavClose">
+        <span class="close-line"></span>
+        <span class="close-line"></span>
+      </button>
+    </div>
+    <div class="mobile-nav-links">
+      <a href="/" class="mobile-nav-link">
+        <span class="nav-icon">🏠</span>
+        Home
+      </a>
+      <a href="/#features" class="mobile-nav-link">
+        <span class="nav-icon">⭐</span>
+        Features
+      </a>
+      <a href="/#benefits" class="mobile-nav-link">
+        <span class="nav-icon">💡</span>
+        Benefits
+      </a>
+      <a href="/#testimonials" class="mobile-nav-link">
+        <span class="nav-icon">💬</span>
+        Testimonials
+      </a>
+      <a href="/#stats" class="mobile-nav-link">
+        <span class="nav-icon">📊</span>
+        Results
+      </a>
+      <div class="mobile-auth-section">
+        <a href="/login" class="mobile-nav-link mobile-login">
+          <span class="nav-icon">🔑</span>
+          Login
+        </a>
+        <a href="/register" class="mobile-nav-link mobile-register">
+          <span class="nav-icon">📝</span>
+          Register
+        </a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<% if(locals.message){ %>
+<div class="alert">
+  <p><%= locals.message %></p>
+  <button class="close-alert">X</button>
+</div>
+<script>
+  document.querySelector(".close-alert").addEventListener("click", function () {
+    this.parentElement.style.display = "none";
+  });
+</script>
+<% }%>

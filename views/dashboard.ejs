@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmer Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="mobile-nav.js"></script>
+  </head>
+  <body>
+    <%- include("_dashheader.ejs")%>
+    <main>
+      <%- include("_dashnav.ejs")%>
+      <section class="main-content">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+          <div class="welcome-content">
+            <h1>
+              Welcome back, <%= locals.farmer ? locals.farmer.fullname :
+              "Farmer" %>! 👋
+            </h1>
+            <p>Here's what's happening on your farm today</p>
+          </div>
+          <div class="welcome-actions">
+            <a href="/expenses" class="btn btn-outline">Record Expense</a>
+            <a href="/animal-profiles" class="btn">View Animals</a>
+          </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card stat-primary">
+            <div class="stat-icon">🐄</div>
+            <div class="stat-content">
+              <h3><%= stats.totalAnimals %></h3>
+              <p>Active Animals</p>
+              <span class="stat-trend">All healthy</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-success">
+            <div class="stat-icon">🥛</div>
+            <div class="stat-content">
+              <h3><%= stats.totalProduction.toFixed(1) %>L</h3>
+              <p>30-Day Production</p>
+              <span class="stat-trend">Last 30 days</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-info">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+              <h3><%= stats.avgDailyProduction.toFixed(1) %>L</h3>
+              <p>Daily Average</p>
+              <span class="stat-trend">Per day</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-warning">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+              <h3>KSh <%= stats.totalExpenses.toLocaleString() %></h3>
+              <p>Monthly Expenses</p>
+              <span class="stat-trend">Last 30 days</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="dashboard-grid">
+          <!-- Production Charts Section -->
+          <div class="dashboard-section">
+            <div class="section-header">
+              <h2>📈 Production Trends</h2>
+              <p>Individual animal performance over the last 15 days</p>
+            </div>
+
+            <% if (Object.keys(groupedData).length > 0) { %>
+            <div class="charts-grid">
+              <% for (const animal in groupedData){ %>
+              <div class="chart-wrapper">
+                <div class="chart-header">
+                  <h3 class="chart-title">
+                    <span class="animal-emoji">🐄</span>
+                    <%= groupedData[animal].animal_name %>
+                  </h3>
+                  <div class="chart-stats">
+                    <span class="latest-production">
+                      Latest: <%= groupedData[animal].total_daily_productions[0]
+                      || 0 %>L
+                    </span>
+                  </div>
+                </div>
+                <canvas id="<%=animal%>" class="animal-chart"></canvas>
+              </div>
+              <% } %>
+            </div>
+            <% } else { %>
+            <div class="empty-state">
+              <div class="empty-icon">📊</div>
+              <h3>No Production Data</h3>
+              <p>Start recording milk production to see charts here</p>
+              <a href="/milk-production" class="btn">Record Production</a>
+            </div>
+            <% } %>
+          </div>
+
+          <!-- Recent Activity Section -->
+          <div class="dashboard-section">
+            <div class="section-header">
+              <h2>🕒 Recent Activity</h2>
+              <p>Latest farm activities and updates</p>
+            </div>
+
+            <div class="activity-feed">
+              <% if (recentActivities.length > 0) { %> <%
+              recentActivities.forEach(activity => { %>
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <% if (activity.type === 'milk_production') { %> 🥛 <% } else
+                  if (activity.type === 'expense') { %> 💰 <% } else { %> 📝 <%
+                  } %>
+                </div>
+                <div class="activity-content">
+                  <p class="activity-description">
+                    <%= activity.description %>
+                  </p>
+                  <span class="activity-date">
+                    <%= new Date(activity.activity_date).toLocaleDateString() %>
+                  </span>
+                </div>
+              </div>
+              <% }); %> <% } else { %>
+              <div class="empty-state">
+                <div class="empty-icon">📝</div>
+                <h3>No Recent Activity</h3>
+                <p>Activities will appear here as you use the system</p>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <h3>Quick Actions</h3>
+          <div class="actions-grid">
+            <a href="/animal-profiles" class="action-card">
+              <div class="action-icon">🐄</div>
+              <h4>Manage Animals</h4>
+              <p>View and update animal information</p>
+            </a>
+            <a href="/expenses" class="action-card">
+              <div class="action-icon">💰</div>
+              <h4>Record Expense</h4>
+              <p>Add new farm expenses</p>
+            </a>
+            <a href="/milk-production" class="action-card">
+              <div class="action-icon">🥛</div>
+              <h4>Record Production</h4>
+              <p>Log daily milk production</p>
+            </a>
+            <a href="/vaccination" class="action-card">
+              <div class="action-icon">💉</div>
+              <h4>Vaccination</h4>
+              <p>Track animal vaccinations</p>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Chart Scripts -->
+    <script>
+      // Chart colors
+      const chartColors = [
+        '#2c6e49', '#4c956c', '#6bb77b', '#8fbc8f', '#98fb98',
+        '#90ee90', '#7ccd7c', '#66cdaa', '#20b2aa', '#5f9ea0'
+      ];
+      const groupedData = <%- JSON.stringify(groupedData) %>;
+
+      <% for (const animal in groupedData){ %>
+        const xValues_<%= animal %> = <%- JSON.stringify(groupedData[animal].production_dates) %>;
+        const yValues_<%= animal %> = <%- JSON.stringify(groupedData[animal].total_daily_productions) %>;
+        const colorIndex_<%= animal %> = Object.keys(groupedData).indexOf('<%= animal %>') % chartColors.length;
+
+        new Chart("<%=animal%>", {
+          type: "line",
+          data: {
+            labels: xValues_<%= animal %>,
+            datasets: [{
+              label: 'Daily Production (L)',
+              fill: true,
+              lineTension: 0.3,
+              backgroundColor: chartColors[colorIndex_<%= animal %>] + '20',
+              borderColor: chartColors[colorIndex_<%= animal %>],
+              borderWidth: 3,
+              pointBackgroundColor: chartColors[colorIndex_<%= animal %>],
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              data: yValues_<%= animal %>,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleColor: 'white',
+                bodyColor: 'white',
+                borderColor: chartColors[colorIndex_<%= animal %>],
+                borderWidth: 1,
+                cornerRadius: 8,
+                displayColors: false
+              }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  min: 0,
+                  fontColor: '#666',
+                  fontFamily: 'Arial, sans-serif'
+                },
+                gridLines: {
+                  color: 'rgba(0,0,0,0.1)',
+                  drawBorder: false
+                }
+              }],
+              xAxes: [{
+                ticks: {
+                  fontColor: '#666',
+                  fontFamily: 'Arial, sans-serif',
+                  maxRotation: 45
+                },
+                gridLines: {
+                  color: 'rgba(0,0,0,0.1)',
+                  drawBorder: false
+                }
+              }]
+            },
+            elements: {
+              point: {
+                hoverBackgroundColor: chartColors[colorIndex_<%= animal %>]
+              }
+            }
+          },
+        });
+      <% } %>
+    </script>
+  </body>
+</html>
